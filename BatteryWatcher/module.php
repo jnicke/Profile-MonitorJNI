@@ -200,7 +200,8 @@ class BatteryWatcher extends IPSModule {
 
 	public function NotifyApp() {
 		$NotifierTitle = $this->GetBuffer("NotifierSubject");
-		$NotifierMessage = $this->GetBuffer("NotifierMessage");
+		//$NotifierMessage = $this->GetBuffer("NotifierMessage");
+		$NotifierMessage = "Check webfront for details";
 		if ($NotifierMessage == "") {
 			$NotifierMessage = "Test Message";
 		}
