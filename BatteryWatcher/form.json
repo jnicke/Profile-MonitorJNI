@@ -1,0 +1,116 @@
+{
+    "elements": [
+        {
+            "type": "ExpansionPanel",
+            "caption": "Module Help",
+            "items": [
+                {
+                    "type": "Label",
+                    "label": "This module allows to monitor actors using batteries and check if those are empty."
+                },
+                {
+                    "type": "Label",
+                    "label": "To use the module Active it and set how you want to get informed about empty batteries."
+                },
+                {
+                    "type": "Label",
+                    "label": "The HTML box can be added to a web front - email notifcations can also be send out when there is an empty battery."
+                },
+                {
+                    "type": "Label",
+                    "label": "Profiles being checked are: ~Battery => true, ~Battery.Reversed => false, ~Battery.100 => 25"
+                }
+            ]
+        },
+        {
+            "type": "Label",
+            "label": "Batterie Watcher - Configuration"
+        },
+	    {
+		    "type": "CheckBox",
+		    "name": "Active",
+		    "caption": "Active"
+	    },
+        {
+            "type": "NumberSpinner",
+            "name": "ExecutionHour",
+            "caption": "Hour",
+            "suffix": "",
+            "minimum": "0",
+            "maximum": "24"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "ExecutionMinute",
+            "caption": "Minute",
+            "suffix": "",
+            "minimum": "0",
+            "maximum": "59"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "ExecutionInterval",
+            "caption": "Interval",
+            "suffix": "days",
+            "minimum": "1",
+            "maximum": "7"
+        },
+        {
+            "type": "CheckBox",
+            "name": "Webfront_HTML",
+            "caption": "Create HTML Box for webfront"
+        },
+        {
+            "type": "CheckBox",
+            "name": "NotifyByEmail",
+            "caption": "Notify by Email"
+        },
+        {
+            "type": "CheckBox",
+            "name": "NotifyByApp",
+            "caption": "Notify by App"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationOKSubject",
+            "caption": "Subject of - No Error - message",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationOKText",
+            "caption": "No empty battery found text",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationErrorSubject",
+            "caption": "Subject of - Error - message",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationErrorText",
+            "caption": "Empty battery found text",
+            "width": "100%"
+        },
+	    {
+		    "type": "SelectInstance",
+		    "name": "EmailVariable",
+		    "caption": "Email Configuration"
+	    }
+    ],
+    "actions": [
+        {
+        "type": "RowLayout",
+            "items": [
+                {
+                    "type": "Button",
+                    "label": "Test & Check Batteries",
+                    "onClick": "BW_Check($id);"
+                }
+            ]
+        }
+    ],
+    "status": []
+}
