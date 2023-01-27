@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (!defined('vtBoolean')) {
     define('vtBoolean', 0);
     define('vtInteger', 1);
@@ -8,7 +10,6 @@ if (!defined('vtBoolean')) {
     define('vtArray', 8);
     define('vtObject', 9);
 }
-
 
 class BatteryWatcher extends IPSModule {
 
