@@ -5,7 +5,7 @@
     "vendor": "elueckel",
     "aliases": 
     [
-        "Battery Watcher",
+        "BatteryWatcher",
 	  "Batterie Überwachnung"
     ],
     "parentRequirements": [],
