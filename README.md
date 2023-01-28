@@ -11,8 +11,8 @@ Der Batterie Watcher überwacht die Batterievariable von Aktoren die diese zu Ve
 
 ## Setup
 Die Einrichtung des Moduls ist sehr einfach. 
-1. Download des Moduls via Module Store oder github https://github.com/elueckel/battery-watcher 
-2. Anlegen der Instanz: Batterie Monitor
+1. Download des Moduls via Module Store oder github https://github.com/elueckel/BatteryWatcher 
+2. Anlegen der Instanz: BatterieWatcher
 3. Bestimmen der Zeit und der Häufigkeit der Ausführung 
 4. Bei Bedarf einrichten der Email/SMTP Instanz und Aktivieren der Benachrichtigung (bei der App wird ein konfiguriertes Webfront vorausgesetzt und automatisch ausgewählt)
 
