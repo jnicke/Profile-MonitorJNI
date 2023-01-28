@@ -66,7 +66,8 @@ class BatteryWatcher extends IPSModule {
 
 	}
 
-	public function Check() {
+	public function Check() 
+	{
 
 		$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
 		
@@ -74,7 +75,6 @@ class BatteryWatcher extends IPSModule {
 		$NotifyByEmail = $this->ReadPropertyBoolean("NotifyByEmail");
 		$WarningVariableID =  $this->GetIDForIdent('Warning');
 		
-
 		$result = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
 		$device_count = 0;
@@ -133,7 +133,8 @@ class BatteryWatcher extends IPSModule {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
-			$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
+			//$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
+			$result      = '<table><tr><td><b>Device</b></td></tr>' . $result .'</table>'; 
 
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) 
 			{
