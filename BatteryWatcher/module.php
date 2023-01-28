@@ -116,8 +116,8 @@ class BatteryWatcher extends IPSModule {
 					$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID) . '</td><td align="center"' . $color2 . '> ' . ($value == true ? 'Low Bat' : 'OK') . ' </td></tr>'; // </br>
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID); // </br>
-					$result .= '<tr><td' . $color . '>' . IPS_GetName(IPS_GetParent($VariableID)); // </br>
-					$resultemail .= IPS_GetName(IPS_GetParent($VariableID))." \n";
+					$result .= '<tr><td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID; // </br>
+					$resultemail .= IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID." \n";
 					$device_count++;
 				}
 			}
