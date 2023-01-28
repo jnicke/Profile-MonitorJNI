@@ -1,7 +1,31 @@
 {
 	"translations": {
 		"de": {
-			"Active": "Aktiv"
+			"Module Help": "Modul Hilfe",
+			"This module allows to monitor actors using batteries and check if those are empty.": "Dieses Modul erlaubt die Überwachnung von Aktoren die Batterien nutzen und die Warniung wenn diese leer werden.",
+			"To use the module Active it and set how you want to get informed about empty batteries.": "Um dieses Modul zu nutzen, muss man es nur Aktivieren und bestimmten wie die Benachrichtigung erfolgen soll.",
+			"The HTML box can be added to a web front - email notifcations can also be send out when there is an empty battery.": "Die HTML Box kann im Webfront genutzt werden, ebenso kann man Emails oder App Nachrichten senden.",
+			"Profiles being checked are: ~Battery => true, ~Battery.Reversed => false, ~Battery.100 => 25": "Die folgenden Profile werden überwacht: ~Battery => true, ~Battery.Reversed => false, ~Battery.100 => 25",
+			"Batterie Watcher - Configuration": "Batterie Überwachnung - Konfiguration",
+			"Active": "Aktiv",
+			"Hour": "Stunde",
+			"Minute": "Minute",
+			"Interval": "Interval",
+			"Every x Days": "Alle x Tage",
+			"Create HTML Box for webfront": "Daten in HTML Box für Webfront bereitstellen",
+			"Notify by Email": "Email Benachrichtigung",
+			"Notify by App": "App Benachrichtigung",
+			"Email Configuration": "Variable SMTP-Email",
+			"Always send message": "Immer benachrichtigen",
+			"Messages & Translations": "Nachrichten & Übersetzungen",
+			"Subject of - No Error - message": "Betreff der - Kein Fehler - Nachricht",
+			"No empty battery found text": "Text für die - Kein Fehler - Nachricht",
+			"Subject of - Error - message": "Betreff für leere Batterie gefunden Nachricht",
+			"Empty battery found text": "Text die leere Batterie gefunden Nachricht",
+			"Check Batteries and Notify": "Batterien prüfen und Benachrichtigen",
+			"Webfront Messagebox": "Webfront Variable",
+			"Warning Empty Batteries": "Warnung leere Batterien",
+			"Device with empty battery": "Geräte mit leerer Batterie"
 		}
 	}
 }
