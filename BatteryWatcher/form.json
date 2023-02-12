@@ -69,7 +69,7 @@
                     "width": "auto",
                     "add": 0,
                     "edit": {
-                        "type": "String"
+                        "type": "ValidationTextBox"
                     }
                 },
                 {
@@ -78,7 +78,7 @@
                     "width": "auto",
                     "add": 0,
                     "edit": {
-                        "type": "String"
+                        "type": "ValidationTextBox"
                     }
                 }
             ]
