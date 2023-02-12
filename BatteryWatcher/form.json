@@ -32,31 +32,54 @@
 		    "caption": "Active"
 	    },
         {
-            "type": "RowLayout",
-            "items": [
+            "type": "NumberSpinner",
+            "name": "ExecutionHour",
+            "caption": "Hour",
+            "suffix": "",
+            "minimum": "0",
+            "maximum": "24"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "ExecutionMinute",
+            "caption": "Minute",
+            "suffix": "",
+            "minimum": "0",
+            "maximum": "59"
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "ExecutionInterval",
+            "caption": "Interval",
+            "suffix": "days",
+            "minimum": "1",
+            "maximum": "7"
+        },
+        {
+            "type": "List",
+            "name": "ProfilesToMonitor",
+            "caption": "Profiles to monitor",
+            "rowCount": 5,
+            "add": true,
+            "delete": true,
+            "columns": [
                 {
-                    "type": "NumberSpinner",
-                    "name": "ExecutionHour",
-                    "caption": "Hour",
-                    "suffix": "",
-                    "minimum": "0",
-                    "maximum": "24"
+                    "caption": "ProfileName",
+                    "name": "Profile Name",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "String"
+                    }
                 },
                 {
-                    "type": "NumberSpinner",
-                    "name": "ExecutionMinute",
-                    "caption": "Minute",
-                    "suffix": "",
-                    "minimum": "0",
-                    "maximum": "59"
-                },
-                {
-                    "type": "NumberSpinner",
-                    "name": "ExecutionInterval",
-                    "caption": "Interval",
-                    "suffix": "Every x Days",
-                    "minimum": "1",
-                    "maximum": "7"
+                    "caption": "ProfileValue",
+                    "name": "Profile Value",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "String"
+                    }
                 }
             ]
         },
@@ -71,50 +94,39 @@
             "caption": "Notify by Email"
         },
         {
-            "type": "SelectInstance",
-            "name": "EmailVariable",
-            "caption": "Email Configuration"
-        },
-        {
             "type": "CheckBox",
             "name": "NotifyByApp",
             "caption": "Notify by App"
         },
         {
-            "type": "CheckBox",
-            "name": "NotifyAlways",
-            "caption": "Always send message"
+            "type": "ValidationTextBox",
+            "name": "NotificationOKSubject",
+            "caption": "Subject of - No Error - message",
+            "width": "100%"
         },
         {
-            "type": "ExpansionPanel",
-            "caption": "Messages & Translations",
-            "items": [
-                {
-                    "type": "ValidationTextBox",
-                    "name": "NotificationOKSubject",
-                    "caption": "Subject of - No Error - message",
-                    "width": "100%"
-                },
-                {
-                    "type": "ValidationTextBox",
-                    "name": "NotificationOKText",
-                    "caption": "No empty battery found text",
-                    "width": "100%"
-                },
-                {
-                    "type": "ValidationTextBox",
-                    "name": "NotificationErrorSubject",
-                    "caption": "Subject of - Error - message",
-                    "width": "100%"
-                },
-                {
-                    "type": "ValidationTextBox",
-                    "name": "NotificationErrorText",
-                    "caption": "Empty battery found text",
-                    "width": "100%"
-                }
-            ]
-        }
+            "type": "ValidationTextBox",
+            "name": "NotificationOKText",
+            "caption": "No empty battery found text",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationErrorSubject",
+            "caption": "Subject of - Error - message",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationErrorText",
+            "caption": "Empty battery found text",
+            "width": "100%"
+        },
+	    {
+		    "type": "SelectInstance",
+		    "name": "EmailVariable",
+		    "caption": "Email Configuration"
+	    }
     ],
     "actions": [
         {
@@ -122,7 +134,7 @@
             "items": [
                 {
                     "type": "Button",
-                    "label": "Check Batteries and Notify",
+                    "label": "Test & Check Batteries",
                     "onClick": "BW_Check($id);"
                 }
             ]
