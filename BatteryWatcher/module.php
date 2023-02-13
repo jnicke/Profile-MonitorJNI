@@ -79,7 +79,7 @@ class BatteryWatcher extends IPSModule {
 		$Profiles2Monitor = str_replace($ToRemove,"",$Profiles2Monitor);
 		var_dump($Profiles2Monitor);
 		
-		$Profiles2MonitorArray = json_decode($Profiles2Monitor,true);
+		$Profiles2MonitorArray = json_decode($Profiles2Monitor);
 		
 		$ToRemove = array("ProfileName",":","ProfileValue");
 		$Profiles2Monitor = str_replace($ToRemove,"",$Profiles2MonitorArray);
