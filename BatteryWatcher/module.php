@@ -21,7 +21,7 @@ class BatteryWatcher extends IPSModule {
 		$this->RegisterPropertyBoolean("Active", 0);
 		$this->RegisterPropertyInteger("Time_To_Check", "18");
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
-		$this->RegisterPropertyString("Profiles2Monitor", 0);
+		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon - Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
 		$this->RegisterPropertyString("NotificationErrorSubject","Symcon - Batterie Monitor"); 
@@ -75,10 +75,13 @@ class BatteryWatcher extends IPSModule {
 		$WarningVariableID =  $this->GetIDForIdent('Warning');
 		$Profiles2Monitor = $this->ReadPropertyString("Profiles2Monitor");
 
-		$Profiles2MonitorArray = json_decode($Profiles2Monitor);
+		$Profiles2MonitorArray = json_decode($Profiles2Monitor,true);
+		//var_dump($Profiles2Monitor);
+		$Profiles2Monitor = str_replace("ProfileName,:,ProfileValue","",$Profiles2MonitorArray);
+		//var_dump($Profiles2Monitor);
 
-		$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
-		
+		//$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
+		//$Profiles = $Profiles2MonitorArray;
 
 		$result = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
