@@ -68,7 +68,7 @@ class BatteryWatcher extends IPSModule {
 
 	public function Check() {
 
-		$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
+		//$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
 		
 		$NotifyByApp = $this->ReadPropertyBoolean("NotifyByApp");
 		$NotifyByEmail = $this->ReadPropertyBoolean("NotifyByEmail");
