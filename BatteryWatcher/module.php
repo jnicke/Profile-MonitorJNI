@@ -81,8 +81,8 @@ class BatteryWatcher extends IPSModule {
 		$Profiles2Monitor = str_replace($ToRemove,"",$Profiles2MonitorArray);
 		var_dump($Profiles2Monitor);
 
-		$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
-		$Profiles = $Profiles2MonitorArray;
+		//$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
+		$Profiles = $Profiles2Monitor;
 
 		$result = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
