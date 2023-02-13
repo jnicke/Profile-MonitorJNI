@@ -76,9 +76,9 @@ class BatteryWatcher extends IPSModule {
 		$Profiles2Monitor = $this->ReadPropertyString("Profiles2Monitor");
 
 		$Profiles2MonitorArray = json_decode($Profiles2Monitor,true);
-		//var_dump($Profiles2Monitor);
+		var_dump($Profiles2Monitor);
 		$Profiles2Monitor = str_replace("ProfileName,:,ProfileValue","",$Profiles2MonitorArray);
-		//var_dump($Profiles2Monitor);
+		var_dump($Profiles2Monitor);
 
 		$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
 		$Profiles = $Profiles2MonitorArray;
