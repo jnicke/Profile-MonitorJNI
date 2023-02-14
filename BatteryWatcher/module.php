@@ -75,18 +75,12 @@ class BatteryWatcher extends IPSModule {
 		$WarningVariableID =  $this->GetIDForIdent('Warning');
 		$Profiles2Monitor = $this->ReadPropertyString("Profiles2Monitor");
 
-		$ToRemove = array('"ProfileName":',',"ProfileValue"');
-		$Profiles2Monitor = str_replace($ToRemove,"",$Profiles2Monitor);
-		var_dump($Profiles2Monitor);
-		
-		$Profiles2MonitorArray = json_decode($Profiles2Monitor,true);
-		
-		$ToRemove = array("ProfileName",":","ProfileValue");
-		$Profiles2Monitor = str_replace($ToRemove,"",$Profiles2MonitorArray);
-		var_dump($Profiles2Monitor);
+		$result_array = array();
+		foreach(json_decode($Profiles2Monitor,true) as $sub_array) {
+			$result_array[$sub_array["ProfileName"]] = $sub_array["ProfileValue"];
+		}
 
-		//$this->SendDebug("Profiles",$Profiles2MonitorArray, 0);
-		$Profiles = $Profiles2Monitor;
+		$Profiles = $result_array;
 
 		$result = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
