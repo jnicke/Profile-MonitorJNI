@@ -107,7 +107,8 @@
             "type": "ValidationTextBox",
             "name": "NotificationOKSubject",
             "caption": "Subject of - No Error - message",
-            "width": "100%"
+            "width": "100%",
+            "validate": "^[A-z0-9\\s]{0,32}$"
         },
         {
             "type": "ValidationTextBox",
@@ -119,7 +120,8 @@
             "type": "ValidationTextBox",
             "name": "NotificationErrorSubject",
             "caption": "Subject of - Error - message",
-            "width": "100%"
+            "width": "100%",
+            "validate": "^[A-z0-9\\s]{0,32}$"
         },
         {
             "type": "ValidationTextBox",
