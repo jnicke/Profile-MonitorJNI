@@ -22,9 +22,9 @@ class BatteryWatcher extends IPSModule {
 		$this->RegisterPropertyInteger("Time_To_Check", "18");
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
-		$this->RegisterPropertyString("NotificationOKSubject","Symcon - Batterie Monitor"); 
+		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
-		$this->RegisterPropertyString("NotificationErrorSubject","Symcon - Batterie Monitor"); 
+		$this->RegisterPropertyString("NotificationErrorSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationErrorText","Es wurde mindestens eine schwache Batterie gefunden \n Leere Batterien:"); 
 		$this->RegisterPropertyBoolean("NotifyByEmail", 0);
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
