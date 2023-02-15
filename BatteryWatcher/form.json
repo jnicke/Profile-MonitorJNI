@@ -113,7 +113,13 @@
         {
             "type": "ValidationTextBox",
             "name": "NotificationOKText",
-            "caption": "No empty battery found text",
+            "caption": "No empty battery found text in Email",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationOKTextApp",
+            "caption": "No empty battery found text in App",
             "width": "100%"
         },
         {
@@ -126,7 +132,13 @@
         {
             "type": "ValidationTextBox",
             "name": "NotificationErrorText",
-            "caption": "Empty battery found text",
+            "caption": "Empty battery found text in Email",
+            "width": "100%"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "NotificationErrorTextApp",
+            "caption": "Empty battery found text in Email in App",
             "width": "100%"
         },
 	    {

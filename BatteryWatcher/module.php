@@ -24,8 +24,10 @@ class BatteryWatcher extends IPSModule {
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
+		$this->RegisterPropertyString("NotificationOKTextApp","Keine leeren Batterien gefunden"); 
 		$this->RegisterPropertyString("NotificationErrorSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationErrorText","Es wurde mindestens eine schwache Batterie gefunden \n Leere Batterien:"); 
+		$this->RegisterPropertyString("NotificationErrorTextApp","Es wurde mindestens eine schwache Batterie gefunden");
 		$this->RegisterPropertyBoolean("NotifyByEmail", 0);
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		//$this->RegisterPropertyInteger("NotificationType", "0");
@@ -171,15 +173,15 @@ class BatteryWatcher extends IPSModule {
 				if ($result == "") 
 				{
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
-					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKText"));
-					$this->SetBuffer("NotifierMessage","Nix gefunden");
+					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
+					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKTextApp"));
 					$this->NotifyApp();
 				}
 				elseif ($result != "") 
 				{
 					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
-					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorText"));
-					$this->SetBuffer("NotifierMessage",$resultemail);
+					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
+					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationErrorTextApp"));
 					$this->NotifyApp();
 				}
 			}
