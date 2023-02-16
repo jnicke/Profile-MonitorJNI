@@ -1,12 +1,11 @@
 {
     "id": "{D28C98B1-FB03-3D25-8816-A9E31C39A034}",
-    "name": "BatteryWatcher",
+    "name": "ProfileMonitor",
     "type": 3,
     "vendor": "elueckel",
     "aliases": 
     [
-        "BatteryWatcher",
-	  "Batterie Überwachnung"
+        "Profile Monitor"
     ],
     "parentRequirements": [],
     "childRequirements": [],

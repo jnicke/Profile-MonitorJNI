@@ -11,7 +11,7 @@ if (!defined('vtBoolean')) {
     define('vtObject', 9);
 }
 
-class BatteryWatcher extends IPSModule {
+class ProfileMonitor extends IPSModule {
 
 	public function Create() {
 		//Never delete this line!

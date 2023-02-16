@@ -1,12 +1,12 @@
 {
     "id": "{F6666B38-34A7-7220-938C-33B095A4397B}",
-    "name": "BatteryWatcher",
+    "name": "ProfileMonitor",
     "author": "elueckel",
-    "url": "https://github.com/elueckel/battery-watcher",
+    "url": "https://github.com/elueckel/profile-monitor",
     "compatibility": {
-        "version": "5.5"
+        "version": "6.0"
     },
-    "version": "0.5",
+    "version": "1.0",
     "build": 0,
     "date": 0
 }

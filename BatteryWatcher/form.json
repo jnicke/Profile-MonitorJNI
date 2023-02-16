@@ -6,7 +6,7 @@
             "items": [
                 {
                     "type": "Label",
-                    "label": "This module allows to monitor variables based on their profiles within Symcon. A standard use case is to check for empty batteries."
+                    "label": "This module allows monitoring variables based on their profiles within Symcon. A standard use case is to check for empty batteries."
                 },
                 {
                     "type": "Label",
@@ -98,59 +98,59 @@
             "name": "NotifyByEmail",
             "caption": "Notify by Email"
         },
-	{
-	    "type": "SelectInstance",
-	    "name": "EmailVariable",
-	    "caption": "Email Configuration"
-    	},
         {
-            "type": "CheckBox",
-            "name": "NotifyByApp",
-            "caption": "Notify by App"
+            "type": "SelectInstance",
+            "name": "EmailVariable",
+            "caption": "Email Configuration"
         },
-	{
+        {
+                "type": "CheckBox",
+                "name": "NotifyByApp",
+                "caption": "Notify by App"
+        },
+        {
             "type": "ExpansionPanel",
             "caption": "Messages & Translations",
             "items": [
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationOKSubject",
-			    "caption": "Subject of - No Error - message",
-			    "width": "100%",
-			    "validate": "^[A-z0-9\\s]{0,32}$"
-			},
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationOKText",
-			    "caption": "No empty battery found text in Email",
-			    "width": "100%"
-			},
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationOKTextApp",
-			    "caption": "No empty battery found text in App",
-			    "width": "100%"
-			},
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationErrorSubject",
-			    "caption": "Subject of - Error - message",
-			    "width": "100%",
-			    "validate": "^[A-z0-9\\s]{0,32}$"
-			},
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationErrorText",
-			    "caption": "Empty battery found text in Email",
-			    "width": "100%"
-			},
-			{
-			    "type": "ValidationTextBox",
-			    "name": "NotificationErrorTextApp",
-			    "caption": "Empty battery found text in Email in App",
-			    "width": "100%"
-			}
-		]
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationOKSubject",
+                    "caption": "Subject of - No Error - message (max. 32 Char.)",
+                    "width": "100%",
+                    "validate": "^[A-z0-9\\s]{0,32}$"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationOKText",
+                    "caption": "Nothing found text in Email",
+                    "width": "100%"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationOKTextApp",
+                    "caption": "Nothing found text in App",
+                    "width": "100%"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationErrorSubject",
+                    "caption": "Subject of - Error - message (max. 32 Char.)",
+                    "width": "100%",
+                    "validate": "^[A-z0-9\\s]{0,32}$"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationErrorText",
+                    "caption": "Something found text in Email",
+                    "width": "100%"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationErrorTextApp",
+                    "caption": "Something found text in App",
+                    "width": "100%"
+                }
+		    ]
         }
     ],
     "actions": [
