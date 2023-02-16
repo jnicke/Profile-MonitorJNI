@@ -47,7 +47,7 @@ class ProfileMonitor extends IPSModule {
 		//$this->EnableAction("Active");
 
 		//Component sets timer, but default is OFF
-		$this->RegisterTimer("Battery Monitor",0,"BW_Check(\$_IPS['TARGET']);");
+		$this->RegisterTimer("Profile Monitor",0,"BW_Check(\$_IPS['TARGET']);");
 
 	}
 
@@ -242,10 +242,10 @@ class ProfileMonitor extends IPSModule {
 			$target->setTime($Hour, $Minute, 0);
 			$diff = $target->getTimestamp() - $now->getTimestamp();
 			$Timer = $diff * 1000;
-			$this->SetTimerInterval('Battery Monitor', $Timer);
+			$this->SetTimerInterval('Profile Monitor', $Timer);
 		}
 		else if ($Active == 0) {
-			$this->SetTimerInterval('Battery Monitor', 0);
+			$this->SetTimerInterval('Profile Monitor', 0);
 		}
 	} 
 
