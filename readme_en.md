@@ -11,7 +11,7 @@ The Profile Monitor is a module that allows to monitor variables and their profi
 
 ## Setup
 The setup of the module is very simple. 
-1. download the module via Module Store or github https://github.com/elueckel/Proofile-Monitor 
+1. download the module via Module Store or github https://github.com/elueckel/Profile-Monitor 
 2. creation of the instance: Profile Monitor
 3. determine the time and frequency of execution 
 4. select the profiles and the trigger value - by default the module monitors batteries
