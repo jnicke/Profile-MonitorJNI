@@ -6,25 +6,25 @@
             "items": [
                 {
                     "type": "Label",
-                    "label": "This module allows to monitor actors using batteries and check if those are empty."
+                    "label": "This module allows to monitor variables based on their profiles within Symcon. A standard use case is to check for empty batteries."
                 },
                 {
                     "type": "Label",
-                    "label": "To use the module Active it and set how you want to get informed about empty batteries."
+                    "label": "To use the module Activate it, set the frequency when profiles should be checked and how you want to get informed about e.g. empty batteries."
                 },
                 {
                     "type": "Label",
-                    "label": "The HTML box can be added to a web front - email notifcations can also be send out when there is an empty battery."
+                    "label": "The HTML box can be added to a web front - email or app notifcations can also be send out when there is an empty battery."
                 },
                 {
                     "type": "Label",
-                    "label": "Profiles being checked are: ~Battery => true, ~Battery.Reversed => false, ~Battery.100 => 25"
+                    "label": "The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them."
                 }
             ]
         },
         {
             "type": "Label",
-            "label": "Batterie Watcher - Configuration"
+            "label": "Profile Monitor - Configuration"
         },
 	    {
 		    "type": "CheckBox",
@@ -63,7 +63,7 @@
         {
             "type": "List",
             "name": "Profiles2Monitor",
-            "caption": "Profiles to monitor",
+            "caption": "Profiles to monitor - Default for empty batteries",
             "rowCount": 5,
             "add": true,
             "delete": true,
@@ -98,54 +98,60 @@
             "name": "NotifyByEmail",
             "caption": "Notify by Email"
         },
+	{
+	    "type": "SelectInstance",
+	    "name": "EmailVariable",
+	    "caption": "Email Configuration"
+    	},
         {
             "type": "CheckBox",
             "name": "NotifyByApp",
             "caption": "Notify by App"
         },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationOKSubject",
-            "caption": "Subject of - No Error - message",
-            "width": "100%",
-            "validate": "^[A-z0-9\\s]{0,32}$"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationOKText",
-            "caption": "No empty battery found text in Email",
-            "width": "100%"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationOKTextApp",
-            "caption": "No empty battery found text in App",
-            "width": "100%"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationErrorSubject",
-            "caption": "Subject of - Error - message",
-            "width": "100%",
-            "validate": "^[A-z0-9\\s]{0,32}$"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationErrorText",
-            "caption": "Empty battery found text in Email",
-            "width": "100%"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "NotificationErrorTextApp",
-            "caption": "Empty battery found text in Email in App",
-            "width": "100%"
-        },
-	    {
-		    "type": "SelectInstance",
-		    "name": "EmailVariable",
-		    "caption": "Email Configuration"
-	    }
+	{
+            "type": "ExpansionPanel",
+            "caption": "Messages & Translations",
+            "items": [
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationOKSubject",
+			    "caption": "Subject of - No Error - message",
+			    "width": "100%",
+			    "validate": "^[A-z0-9\\s]{0,32}$"
+			},
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationOKText",
+			    "caption": "No empty battery found text in Email",
+			    "width": "100%"
+			},
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationOKTextApp",
+			    "caption": "No empty battery found text in App",
+			    "width": "100%"
+			},
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationErrorSubject",
+			    "caption": "Subject of - Error - message",
+			    "width": "100%",
+			    "validate": "^[A-z0-9\\s]{0,32}$"
+			},
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationErrorText",
+			    "caption": "Empty battery found text in Email",
+			    "width": "100%"
+			},
+			{
+			    "type": "ValidationTextBox",
+			    "name": "NotificationErrorTextApp",
+			    "caption": "Empty battery found text in Email in App",
+			    "width": "100%"
+			}
+		]
+        }
     ],
     "actions": [
         {
@@ -153,7 +159,7 @@
             "items": [
                 {
                     "type": "Button",
-                    "label": "Test & Check Batteries",
+                    "label": "Test & Check Profiles",
                     "onClick": "BW_Check($id);"
                 }
             ]
