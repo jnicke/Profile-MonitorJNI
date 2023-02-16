@@ -11,7 +11,7 @@ if (!defined('vtBoolean')) {
     define('vtObject', 9);
 }
 
-class BatteryWatcher extends IPSModule {
+class ProfileMonitor extends IPSModule {
 
 	public function Create() {
 		//Never delete this line!
@@ -21,13 +21,15 @@ class BatteryWatcher extends IPSModule {
 		$this->RegisterPropertyBoolean("Active", 0);
 		$this->RegisterPropertyInteger("Time_To_Check", "18");
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
-		$this->RegisterPropertyString("NotificationOKSubject","Symcon - Batterie Monitor"); 
+		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
+		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
-		$this->RegisterPropertyString("NotificationErrorSubject","Symcon - Batterie Monitor"); 
+		$this->RegisterPropertyString("NotificationOKTextApp","Keine leeren Batterien gefunden"); 
+		$this->RegisterPropertyString("NotificationErrorSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationErrorText","Es wurde mindestens eine schwache Batterie gefunden \n Leere Batterien:"); 
+		$this->RegisterPropertyString("NotificationErrorTextApp","Es wurde mindestens eine schwache Batterie gefunden");
 		$this->RegisterPropertyBoolean("NotifyByEmail", 0);
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
-		$this->RegisterPropertyBoolean("NotifyAlways", 0);
 		//$this->RegisterPropertyInteger("NotificationType", "0");
 		$this->RegisterPropertyInteger("EmailVariable", 0);
 
@@ -38,7 +40,7 @@ class BatteryWatcher extends IPSModule {
 		//$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		$this->RegisterPropertyString("HTML_Header_Event","Keine Module mit leerer Batterie");
 
-		$this->RegisterVariableBoolean("Warning",$this->Translate('Warning Empty Batteries'),'~Alert');
+		$this->RegisterVariableBoolean("Warning",$this->Translate('Warning'),'~Alert');
 		$this->RegisterVariableInteger("Devices_With_Empty_Battery",$this->Translate('Device with empty battery'));
 
 
@@ -66,15 +68,22 @@ class BatteryWatcher extends IPSModule {
 
 	}
 
-	public function Check() 
-	{
+	public function Check() {
 
-		$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
+		//$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
 		
 		$NotifyByApp = $this->ReadPropertyBoolean("NotifyByApp");
 		$NotifyByEmail = $this->ReadPropertyBoolean("NotifyByEmail");
 		$WarningVariableID =  $this->GetIDForIdent('Warning');
-		
+		$Profiles2Monitor = $this->ReadPropertyString("Profiles2Monitor");
+
+		$result_array = array();
+		foreach(json_decode($Profiles2Monitor,true) as $sub_array) {
+			$result_array[$sub_array["ProfileName"]] = $sub_array["ProfileValue"];
+		}
+
+		$Profiles = $result_array;
+
 		$result = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
 		$device_count = 0;
@@ -117,7 +126,7 @@ class BatteryWatcher extends IPSModule {
 					$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID) . '</td><td align="center"' . $color2 . '> ' . ($value == true ? 'Low Bat' : 'OK') . ' </td></tr>'; // </br>
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID); // </br>
-					$result .= '<tr><td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID; // </br>
+					$result .= '<tr><td' . $color . '>' . IPS_GetName(IPS_GetParent($VariableID)); // </br>
 					$resultemail .= IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID." \n";
 					$device_count++;
 				}
@@ -133,8 +142,7 @@ class BatteryWatcher extends IPSModule {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
-			//$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
-			$result      = '<table><tr><td><b>Device</b></td></tr>' . $result .'</table>'; 
+			$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
 
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) 
 			{
@@ -142,11 +150,9 @@ class BatteryWatcher extends IPSModule {
 				SetValueString($Webfront_Message_BoxID, $result);
 			}
 
-		}
-
-		if ($NotifyByEmail == 1) 
+			if ($NotifyByEmail == 1) 
 			{
-				if ($result == "" AND $this->ReadPropertyBoolean("NotifyAlways") == 1) 
+				if ($result == "") 
 				{
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
@@ -164,21 +170,23 @@ class BatteryWatcher extends IPSModule {
 
 			if ($NotifyByApp == 1) 
 			{
-				if ($result == "" AND $this->ReadPropertyBoolean("NotifyAlways") == 1) 
+				if ($result == "") 
 				{
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
-					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKText"));
-					$this->SetBuffer("NotifierMessage","Nix gefunden");
+					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
+					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKTextApp"));
 					$this->NotifyApp();
 				}
 				elseif ($result != "") 
 				{
 					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
-					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorText"));
-					$this->SetBuffer("NotifierMessage",$resultemail);
+					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
+					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationErrorTextApp"));
 					$this->NotifyApp();
 				}
 			}
+
+		}
 
 	}
 
@@ -202,8 +210,7 @@ class BatteryWatcher extends IPSModule {
 
 	public function NotifyApp() {
 		$NotifierTitle = $this->GetBuffer("NotifierSubject");
-		//$NotifierMessage = $this->GetBuffer("NotifierMessage");
-		$NotifierMessage = "Check webfront for details";
+		$NotifierMessage = $this->GetBuffer("NotifierMessage");
 		if ($NotifierMessage == "") {
 			$NotifierMessage = "Test Message";
 		}
