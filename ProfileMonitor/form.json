@@ -89,6 +89,35 @@
             ]
         },
         {
+            "type": "List",
+            "name": "IDs2Ignore",
+            "caption": "IDs to ignore",
+            "rowCount": 5,
+            "add": true,
+            "delete": true,
+            "columns": [
+                {
+                    "caption": "ID",
+                    "name": "ID2Ignore",
+                    "width": "100",
+                    "add": 0,
+                    "edit": {
+                        "type": "ValidationTextBox",
+                        "validate": "^[0-9]{5}$"
+                    }
+                },
+                {
+                    "caption": "Note",
+                    "name": "ID2IgnoreNote",
+                    "width": "200",
+                    "add": 0,
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                }
+            ]
+        },
+        {
             "type": "CheckBox",
             "name": "Webfront_HTML",
             "caption": "Create HTML Box for webfront"
@@ -107,6 +136,11 @@
                 "type": "CheckBox",
                 "name": "NotifyByApp",
                 "caption": "Notify by App"
+        },
+        {
+            "type": "SelectInstance",
+            "name": "WebfrontVariable",
+            "caption": "Webfront Selection"
         },
         {
             "type": "ExpansionPanel",
