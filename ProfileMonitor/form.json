@@ -91,28 +91,19 @@
         {
             "type": "List",
             "name": "IDs2Ignore",
-            "caption": "IDs to ignore",
+            "caption": "Variables to ignore",
             "rowCount": 5,
             "add": true,
             "delete": true,
             "columns": [
                 {
-                    "caption": "ID",
+                    "caption": "Variable",
                     "name": "ID2Ignore",
-                    "width": "100",
-                    "add": 0,
-                    "edit": {
-                        "type": "ValidationTextBox",
-                        "validate": "^[0-9]{5}$"
-                    }
-                },
-                {
-                    "caption": "Note",
-                    "name": "ID2IgnoreNote",
                     "width": "200",
                     "add": 0,
                     "edit": {
-                        "type": "ValidationTextBox"
+                        "type": "SelectObject",
+                        "validate": "^[0-9]{5}$"
                     }
                 }
             ]
@@ -152,6 +143,12 @@
                     "caption": "Subject of - No Error - message (max. 32 Char.)",
                     "width": "100%",
                     "validate": "^[A-z0-9\\s]{0,32}$"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "HTMLBoxNothingFound",
+                    "caption": "HTML Box Nothing found text",
+                    "width": "100%"
                 },
                 {
                     "type": "ValidationTextBox",
