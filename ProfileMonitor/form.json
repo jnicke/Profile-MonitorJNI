@@ -14,7 +14,7 @@
                 },
                 {
                     "type": "Label",
-                    "label": "The HTML box can be added to a web front - email or app notifcations can also be send out when there is an empty battery."
+                    "label": "To get notified of events it is possible to display a HTML box for the webfront or send out email/app notifications."
                 },
                 {
                     "type": "Label",
@@ -89,22 +89,28 @@
             ]
         },
         {
-            "type": "List",
-            "name": "IDs2Ignore",
+            "type": "ExpansionPanel",
             "caption": "Variables to ignore",
-            "rowCount": 5,
-            "add": true,
-            "delete": true,
-            "columns": [
+            "items": [
                 {
-                    "caption": "Variable",
-                    "name": "ID2Ignore",
-                    "width": "200",
-                    "add": 0,
-                    "edit": {
-                        "type": "SelectObject",
-                        "validate": "^[0-9]{5}$"
-                    }
+                    "type": "List",
+                    "name": "IDs2Ignore",
+                    "caption": "Variables to ignore",
+                    "rowCount": 5,
+                    "add": true,
+                    "delete": true,
+                    "columns": [
+                        {
+                            "caption": "Variable",
+                            "name": "ID2Ignore",
+                            "width": "300",
+                            "add": 0,
+                            "edit": {
+                                "type": "SelectObject",
+                                "validate": "^[0-9]{5}$"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -121,7 +127,7 @@
         {
             "type": "SelectInstance",
             "name": "EmailVariable",
-            "caption": "Email Configuration"
+            "caption": "Email ID Selection"
         },
         {
                 "type": "CheckBox",
@@ -131,28 +137,23 @@
         {
             "type": "SelectInstance",
             "name": "WebfrontVariable",
-            "caption": "Webfront Selection"
+            "caption": "Webfront ID Selection"
         },
         {
             "type": "ExpansionPanel",
-            "caption": "Messages & Translations",
+            "caption": "HTML Box Configuration & Translation",
             "items": [
                 {
-                    "type": "Label",
-                    "label": "HTML Box Configuration",
-                    "bold": "true"
-                },
-                {
                     "type": "ValidationTextBox",
-                    "name": "HTMLBoxAktorHeader",
-                    "caption": "HTML Box Aktor Header",
+                    "name": "HTMLBoxAktorName",
+                    "caption": "HTML Box Actor Objectname",
                     "width": "100%"
                 },
                 {
                     "type": "ValidationTextBox",
                     "name": "HTMLBoxNothingFound",
                     "caption": "HTML Box Nothing found text",
-                    "width": "100%"
+                    "widthUr": "100%"
                 },
                 {
                     "type": "CheckBox",
@@ -165,10 +166,28 @@
                     "caption": "Display Parent"
                 },
                 {
-                    "type": "Label",
-                    "label": "Message Configuration",
-                    "bold": "true"
+                    "type": "CheckBox",
+                    "name": "HTMLBoxLocation",
+                    "caption": "Display Location"
                 },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "HTMLBoxParentTranslation",
+                    "caption": "Table header - Parent Object",
+                    "width": "100%"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "HTMLBoxLocationTranslation",
+                    "caption": "Table header - Location in Object Tree",
+                    "width": "100%"
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Message Configuration & Translation",
+            "items": [
                 {
                     "type": "ValidationTextBox",
                     "name": "NotificationOKSubject",
