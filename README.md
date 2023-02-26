@@ -29,3 +29,8 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * HTML Box fürs Webfront 
 * Nachricht via Email / Symcon App
 
+1.1 - 26-02-2023
+* Neu - Es können Variablen ausgeschlossen werden
+* Neu - Im Webfront ist es nun möglich ID, Parent Object und Pfad anzuzeigen
+* Neu - Auswahl eine Webfronts ist möglich
+* Fix - wenn keine Variablen gefunden wurden, wurde Webfront nicht geleert

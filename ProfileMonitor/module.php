@@ -22,6 +22,16 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyInteger("Time_To_Check", "18");
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
+		$this->RegisterPropertyString("IDs2Ignore","");
+		$this->RegisterPropertyString("HTMLBoxAktorName","Gerät");
+		$this->RegisterPropertyString("HTMLBoxNothingFound","Keine Komponenten gefunden");
+		$this->RegisterPropertyString("HTMLBoxParentTranslation","Ursprungsobjekt");
+		$this->RegisterPropertyString("HTMLBoxLocationTranslation","Ort im Objektbaum");
+		$this->RegisterPropertyBoolean("HTMLBoxID",true);
+		$this->RegisterPropertyBoolean("HTMLBoxParent",false);
+		$this->RegisterPropertyBoolean("HTMLBoxLocation",false);
+		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
+		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
 		$this->RegisterPropertyString("NotificationOKTextApp","Keine leeren Batterien gefunden"); 
@@ -32,6 +42,7 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		//$this->RegisterPropertyInteger("NotificationType", "0");
 		$this->RegisterPropertyInteger("EmailVariable", 0);
+		$this->RegisterPropertyInteger("WebfrontVariable", 0);
 
 		$this->RegisterPropertyInteger("ExecutionHour","18");
 		$this->RegisterPropertyInteger("ExecutionMinute","00");
@@ -76,6 +87,7 @@ class ProfileMonitor extends IPSModule {
 		$NotifyByEmail = $this->ReadPropertyBoolean("NotifyByEmail");
 		$WarningVariableID =  $this->GetIDForIdent('Warning');
 		$Profiles2Monitor = $this->ReadPropertyString("Profiles2Monitor");
+		$IDs2Ignore = $this->ReadPropertyString("IDs2Ignore");
 
 		$result_array = array();
 		foreach(json_decode($Profiles2Monitor,true) as $sub_array) {
@@ -89,45 +101,81 @@ class ProfileMonitor extends IPSModule {
 		$device_count = 0;
 
 		$VariableIDs = IPS_GetVariableList();
-		foreach($VariableIDs as $VariableID)
-		{
-			if ($VariableID != $WarningVariableID)
-			{
+		foreach($VariableIDs as $VariableID) {
+			if ($VariableID != $WarningVariableID) {
 				$variableData = IPS_GetVariable($VariableID);
 				$value = GetValue($VariableID);
 				$profileName = IPS_VariableProfileExists($variableData['VariableProfile']) ? $variableData['VariableProfile'] : "";
 				$profileName = (strlen($variableData['VariableCustomProfile']) > 0 && IPS_VariableProfileExists($variableData['VariableCustomProfile'])) ? $variableData['VariableCustomProfile'] : $profileName;
 
 				$warning = false;
-				if (strlen($profileName) > 0)
-				{
+				if (strlen($profileName) > 0) {
 					foreach ($Profiles as $pName => $pValue)
 					{
 						if ($profileName == $pName)
 						{
-							if (is_bool($pValue))
-							{
-								if ($value == $pValue) { $warning = true; }
+							if (is_bool($pValue)) {
+								if ($value == $pValue) {
+									
+									if (json_decode($IDs2Ignore,true) != null){
+										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+											$IgnoreID = $IgnoreID["ID2Ignore"];
+											if ($VariableID != $IgnoreID) { 
+												$warning = true;
+											} 
+										}
+									}
+									else {
+										//var_dump($VariableID);
+										$warning = true;
+									}
+								}
 							}
 							else
 							{
-								if ($value <= $pValue) { $warning = true; }
+								if ($value <= $pValue) {
+									//foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+									if (json_decode($IDs2Ignore,true) != null){
+									foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+										$IgnoreID = $IgnoreID["ID2Ignore"];
+										if ($VariableID != $IgnoreID) { 
+											$warning = true;
+										} 
+									}
+									}
+									else {
+										//var_dump($VariableID);
+										$warning = true;
+									}
+								}
 							}
 							break;
 						}
 					}
 				}
 
-				if ($warning)
-				{
+				if ($warning) {
 					//$result .= "<em>".IPS_GetLocation($VariableID)."</em>: ".GetValueFormatted($VariableID)."<br />";
 					$textColor = ($value < -100 ? '#B40404' : '#0B610B'); 
-					$color  = ' style="background-color:#080808; color:#ffffff;"'; 
+					$color  = ' style="background-color:'.$this->ReadPropertyString("HTMLBoxBackgroundColor").'; color:'.$this->ReadPropertyString("HTMLBoxTextColor").';"'; 
 					$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID) . '</td><td align="center"' . $color2 . '> ' . ($value == true ? 'Low Bat' : 'OK') . ' </td></tr>'; // </br>
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID); // </br>
-					$result .= '<tr><td' . $color . '>' . IPS_GetName(IPS_GetParent($VariableID)); // </br>
-					$resultemail .= IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID." \n";
+					
+					//$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td><td' . $color . '>'.$VariableID.'</td>'; // </br> HTMLBoxParent
+					
+					$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td>';
+					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
+						$result .= '<td' . $color . '>'.$VariableID.'</td>'; // </br>
+					}
+					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
+						$result .= '<td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
+					}
+					if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
+						$result .= '<td' . $color . '>'.IPS_GetLocation($VariableID).'</td>'; // </br>
+					}
+
+					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
 				}
 			}
@@ -137,17 +185,33 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","No empty batteries have been found.", 0);
 			SetValueBoolean($WarningVariableID, false);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
+			//$result      = '<table><tr><td><b>Device</b></td><td></td></tr>Nothing found</table>'; 
+			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
+			SetValueString($Webfront_Message_BoxID, $result);
 		}
 		else {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
-			$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
-
+			//$result      = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td><td><b>ID</b></td></tr>' . $result .'</table>'; 
+			
+			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
+			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
+				$HTMLBox .= '<td><b>ID</b></td>'; // </br>
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>'; // </br>
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>'; // </br>
+			}
+			$HTMLBox .= '</tr>'.$result.'</table>';
+			
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) 
 			{
 				$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
-				SetValueString($Webfront_Message_BoxID, $result);
+				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
 
 			if ($NotifyByEmail == 1) 
@@ -185,9 +249,7 @@ class ProfileMonitor extends IPSModule {
 					$this->NotifyApp();
 				}
 			}
-
 		}
-
 	}
 
 	public function EmailApp() {
@@ -209,15 +271,21 @@ class ProfileMonitor extends IPSModule {
 	}
 
 	public function NotifyApp() {
-		$NotifierTitle = $this->GetBuffer("NotifierSubject");
-		$NotifierMessage = $this->GetBuffer("NotifierMessage");
-		if ($NotifierMessage == "") {
-			$NotifierMessage = "Test Message";
+		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
+		if ($WebfrontVariable != "") {
+			$NotifierTitle = $this->GetBuffer("NotifierSubject");
+			$NotifierMessage = $this->GetBuffer("NotifierMessage");
+			if ($NotifierMessage == "") {
+				$NotifierMessage = "Test Message";
+			}
+			$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
+			$this->SendDebug("Notifier","********** App Notifier **********", 0);
+			$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
+			WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
 		}
-		$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
-		$this->SendDebug("Notifier","********** App Notifier **********", 0);
-		$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
-		WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
+		else {
+			echo $this->Translate('Webfront Instance is not configured');
+		}
 	}
 
 	public function SetResetTimerInterval() {

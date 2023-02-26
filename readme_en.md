@@ -28,3 +28,9 @@ The module queries every x days at a defined time all variables where a battery 
 * Counter for found variables
 * HTML box for webfront 
 * Message via Email / Symcon App
+
+1.1 - 26-02-2023
+* New - Variables can be excluded
+* New - In the webfront it is now possible to display ID, parent object and path
+* New - selection of a webfront is possible
+* Fix - if no variables were found, webfront was not cleared
