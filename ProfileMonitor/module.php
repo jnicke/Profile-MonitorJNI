@@ -23,7 +23,12 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
 		$this->RegisterPropertyString("IDs2Ignore","");
+		$this->RegisterPropertyString("HTMLBoxAktorHeader","Gerät");
 		$this->RegisterPropertyString("HTMLBoxNothingFound","Keine Komponenten gefunden");
+		$this->RegisterPropertyBoolean("HTMLBoxID",true);
+		$this->RegisterPropertyBoolean("HTMLBoxParent",false);
+		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
+		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
 		$this->RegisterPropertyString("NotificationOKTextApp","Keine leeren Batterien gefunden"); 
@@ -148,12 +153,22 @@ class ProfileMonitor extends IPSModule {
 				if ($warning) {
 					//$result .= "<em>".IPS_GetLocation($VariableID)."</em>: ".GetValueFormatted($VariableID)."<br />";
 					$textColor = ($value < -100 ? '#B40404' : '#0B610B'); 
-					$color  = ' style="background-color:#080808; color:#ffffff;"'; 
+					$color  = ' style="background-color:'.$this->ReadPropertyString("HTMLBoxBackgroundColor").'; color:'.$this->ReadPropertyString("HTMLBoxTextColor").';"'; 
 					$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID) . '</td><td align="center"' . $color2 . '> ' . ($value == true ? 'Low Bat' : 'OK') . ' </td></tr>'; // </br>
 					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID); // </br>
-					$result .= '<tr><td' . $color . '>' . IPS_GetName($VariableID); // </br>
-					$resultemail .= IPS_GetName(IPS_GetParent($VariableID))." ID: ".$VariableID." \n";
+					
+					//$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td><td' . $color . '>'.$VariableID.'</td>'; // </br> HTMLBoxParent
+					
+					$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td>';
+					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
+						$result .= '<td' . $color . '>'.$VariableID.'</td>'; // </br>
+					}
+					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
+						$result .= '<td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
+					}
+
+					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
 				}
 			}
@@ -164,7 +179,7 @@ class ProfileMonitor extends IPSModule {
 			SetValueBoolean($WarningVariableID, false);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
 			//$result      = '<table><tr><td><b>Device</b></td><td></td></tr>Nothing found</table>'; 
-			$result      = '<table><tr><th><b>Device</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
 			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 			SetValueString($Webfront_Message_BoxID, $result);
 		}
@@ -172,12 +187,21 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
-			$result      = '<table><tr><td><b>Device</b></td><td><b>Value</b></td></tr>' . $result .'</table>'; 
-
+			//$result      = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td><td><b>ID</b></td></tr>' . $result .'</table>'; 
+			
+			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td>';
+			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
+				$HTMLBox .= '<td><b>ID</b></td>'; // </br>
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
+				$HTMLBox .= '<td><b>Parent</b></td>'; // </br>
+			}
+			$HTMLBox .= '</tr>'.$result.'</table>';
+			
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) 
 			{
 				$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
-				SetValueString($Webfront_Message_BoxID, $result);
+				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
 
 			if ($NotifyByEmail == 1) 

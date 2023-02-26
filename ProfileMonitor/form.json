@@ -138,17 +138,43 @@
             "caption": "Messages & Translations",
             "items": [
                 {
+                    "type": "Label",
+                    "label": "HTML Box Configuration",
+                    "bold": "true"
+                },
+                {
                     "type": "ValidationTextBox",
-                    "name": "NotificationOKSubject",
-                    "caption": "Subject of - No Error - message (max. 32 Char.)",
-                    "width": "100%",
-                    "validate": "^[A-z0-9\\s]{0,32}$"
+                    "name": "HTMLBoxAktorHeader",
+                    "caption": "HTML Box Aktor Header",
+                    "width": "100%"
                 },
                 {
                     "type": "ValidationTextBox",
                     "name": "HTMLBoxNothingFound",
                     "caption": "HTML Box Nothing found text",
                     "width": "100%"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "HTMLBoxID",
+                    "caption": "Display ID"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "HTMLBoxParent",
+                    "caption": "Display Parent"
+                },
+                {
+                    "type": "Label",
+                    "label": "Message Configuration",
+                    "bold": "true"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "NotificationOKSubject",
+                    "caption": "Subject of - No Error - message (max. 32 Char.)",
+                    "width": "100%",
+                    "validate": "^[A-z0-9\\s]{0,32}$"
                 },
                 {
                     "type": "ValidationTextBox",
