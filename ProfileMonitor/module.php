@@ -23,10 +23,13 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
 		$this->RegisterPropertyString("IDs2Ignore","");
-		$this->RegisterPropertyString("HTMLBoxAktorHeader","Gerät");
+		$this->RegisterPropertyString("HTMLBoxAktorName","Gerät");
 		$this->RegisterPropertyString("HTMLBoxNothingFound","Keine Komponenten gefunden");
+		$this->RegisterPropertyString("HTMLBoxParentTranslation","Ursprungsobjekt");
+		$this->RegisterPropertyString("HTMLBoxLocationTranslation","Ort im Objektbaum");
 		$this->RegisterPropertyBoolean("HTMLBoxID",true);
 		$this->RegisterPropertyBoolean("HTMLBoxParent",false);
+		$this->RegisterPropertyBoolean("HTMLBoxLocation",false);
 		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
 		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
@@ -39,6 +42,7 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		//$this->RegisterPropertyInteger("NotificationType", "0");
 		$this->RegisterPropertyInteger("EmailVariable", 0);
+		$this->RegisterPropertyInteger("WebfrontVariable", 0);
 
 		$this->RegisterPropertyInteger("ExecutionHour","18");
 		$this->RegisterPropertyInteger("ExecutionMinute","00");
@@ -167,6 +171,9 @@ class ProfileMonitor extends IPSModule {
 					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
 						$result .= '<td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
 					}
+					if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
+						$result .= '<td' . $color . '>'.IPS_GetLocation($VariableID).'</td>'; // </br>
+					}
 
 					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
@@ -179,7 +186,7 @@ class ProfileMonitor extends IPSModule {
 			SetValueBoolean($WarningVariableID, false);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
 			//$result      = '<table><tr><td><b>Device</b></td><td></td></tr>Nothing found</table>'; 
-			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
 			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 			SetValueString($Webfront_Message_BoxID, $result);
 		}
@@ -189,12 +196,15 @@ class ProfileMonitor extends IPSModule {
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
 			//$result      = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td><td><b>ID</b></td></tr>' . $result .'</table>'; 
 			
-			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td>';
+			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
 			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
 				$HTMLBox .= '<td><b>ID</b></td>'; // </br>
 			}
 			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-				$HTMLBox .= '<td><b>Parent</b></td>'; // </br>
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>'; // </br>
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>'; // </br>
 			}
 			$HTMLBox .= '</tr>'.$result.'</table>';
 			
@@ -261,15 +271,21 @@ class ProfileMonitor extends IPSModule {
 	}
 
 	public function NotifyApp() {
-		$NotifierTitle = $this->GetBuffer("NotifierSubject");
-		$NotifierMessage = $this->GetBuffer("NotifierMessage");
-		if ($NotifierMessage == "") {
-			$NotifierMessage = "Test Message";
+		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
+		if ($WebfrontVariable != "") {
+			$NotifierTitle = $this->GetBuffer("NotifierSubject");
+			$NotifierMessage = $this->GetBuffer("NotifierMessage");
+			if ($NotifierMessage == "") {
+				$NotifierMessage = "Test Message";
+			}
+			$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
+			$this->SendDebug("Notifier","********** App Notifier **********", 0);
+			$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
+			WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
 		}
-		$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
-		$this->SendDebug("Notifier","********** App Notifier **********", 0);
-		$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
-		WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
+		else {
+			echo $this->Translate('Webfront Instance is not configured');
+		}
 	}
 
 	public function SetResetTimerInterval() {
