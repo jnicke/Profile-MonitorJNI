@@ -20,7 +20,10 @@ class ProfileMonitor extends IPSModule {
 		//Properties
 		$this->RegisterPropertyBoolean("Active", 0);
 		$this->RegisterPropertyInteger("Time_To_Check", "18");
+		$this->RegisterPropertyInteger("TimerMethod", "0");
+		$this->RegisterPropertyInteger("ExecutionMinuteMinute", "10");
 		$this->RegisterPropertyBoolean("Webfront_HTML", 0);
+		$this->RegisterPropertyBoolean("Variable_Output", 0);
 		$this->RegisterPropertyString("Profiles2Monitor", '[{"ProfileName":"~Battery","ProfileValue":true},{"ProfileName":"~Battery.Reversed","ProfileValue":false},{"ProfileName":"~Battery.100","ProfileValue":"25"}]');
 		$this->RegisterPropertyString("IDs2Ignore","");
 		$this->RegisterPropertyString("HTMLBoxAktorName","Gerät");
@@ -69,6 +72,7 @@ class ProfileMonitor extends IPSModule {
 
 		$vpos = 10;
 		$this->MaintainVariable('Webfront_Message_Box', $this->Translate('Webfront Messagebox'), vtString, '~HTMLBox', $vpos++,$this->ReadPropertyBoolean('Webfront_HTML') == 1);
+		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor RAW'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == 1);
 
 		$ActiveID= @IPS_GetObjectIDByIdent('Active', $this->InstanceID);
 		if (IPS_GetObject($ActiveID)['ObjectType'] == 2) {
@@ -97,6 +101,7 @@ class ProfileMonitor extends IPSModule {
 		$Profiles = $result_array;
 
 		$result = "";
+		$result_json = "";
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
 		$device_count = 0;
 
@@ -177,6 +182,8 @@ class ProfileMonitor extends IPSModule {
 
 					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
+
+					$result_json .= '"ID": "'.$VariableID.'",';
 				}
 			}
 		}
@@ -213,6 +220,15 @@ class ProfileMonitor extends IPSModule {
 				$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
+
+			if ($this->ReadPropertyBoolean('Variable_Output') == 1)
+			{
+				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
+
+				$result_json = rtrim($result_json, ',');
+				SetValueString($Profile_Monitor_RAW, $result_json);
+			}
+
 
 			if ($NotifyByEmail == 1) 
 			{
@@ -292,26 +308,32 @@ class ProfileMonitor extends IPSModule {
 		$Active = $this->ReadPropertyBoolean("Active");
 
 		if ($Active == 1) {
-			$Hour = $this->ReadPropertyInteger("ExecutionHour");
-			$Minute = $this->ReadPropertyInteger("ExecutionMinute");
-			$ExecutionInterval = $this->ReadPropertyInteger("ExecutionInterval");
-			$NewTime = $Hour.":".$Minute;
-			$now = new DateTime();
-			$target = new DateTime();
-			if ($NewTime < date("H:i")) {
-				$target->modify('+1 day');
+			if ($this->ReadPropertyInteger("ExecutionHour") == 0) {
+				$Hour = $this->ReadPropertyInteger("ExecutionHour");
+				$Minute = $this->ReadPropertyInteger("ExecutionMinute");
+				$ExecutionInterval = $this->ReadPropertyInteger("ExecutionInterval");
+				$NewTime = $Hour.":".$Minute;
+				$now = new DateTime();
+				$target = new DateTime();
+				if ($NewTime < date("H:i")) {
+					$target->modify('+1 day');
+				}
+				if ($ExecutionInterval == 1) {
+					$target->modify('+'.$ExecutionInterval.' day');
+				}
+				if ($ExecutionInterval > 1) {
+					$target->modify('+'.$ExecutionInterval.' days');
+				}
+				$target->setTime($Hour, $Minute, 0);
+				$diff = $target->getTimestamp() - $now->getTimestamp();
+				$Timer = $diff * 1000;
+				$this->SetTimerInterval('Profile Monitor', $Timer);
 			}
-			if ($ExecutionInterval == 1) {
-				$target->modify('+'.$ExecutionInterval.' day');
+			else if ($this->ReadPropertyInteger("ExecutionHour") == 1) {
+				$Minute = $this->ReadPropertyInteger("ExecutionMinuteMinute");
+				$Timer = $Minute * 1000;
+				$this->SetTimerInterval('Profile Monitor', $Timer);
 			}
-			if ($ExecutionInterval > 1) {
-				$target->modify('+'.$ExecutionInterval.' days');
-			}
-			$target->setTime($Hour, $Minute, 0);
-			$diff = $target->getTimestamp() - $now->getTimestamp();
-			$Timer = $diff * 1000;
-			$this->SetTimerInterval('Profile Monitor', $Timer);
-		}
 		else if ($Active == 0) {
 			$this->SetTimerInterval('Profile Monitor', 0);
 		}

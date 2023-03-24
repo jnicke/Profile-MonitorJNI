@@ -26,18 +26,42 @@
             "type": "Label",
             "label": "Profile Monitor - Configuration"
         },
-	    {
-		    "type": "CheckBox",
-		    "name": "Active",
-		    "caption": "Active"
-	    },
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "CheckBox",
+                    "name": "Active",
+                    "caption": "Active"
+                },
+                {
+                    "type": "Select",
+                    "name": "TimerMethod",
+                    "caption": "Check Timer Method",
+                    "options": [
+                        {
+                            "caption": "Timer based on Days",
+                            "value": 0
+                        },
+                        {
+                            "caption": "Timer based on Minutes",
+                            "value": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Label",
+            "label": "Timer - Configuration"
+        },
         {
             "type": "RowLayout",
             "items": [
                 {
                     "type": "NumberSpinner",
                     "name": "ExecutionHour",
-                    "caption": "Hour",
+                    "caption": "Daily - Hour",
                     "suffix": "",
                     "minimum": "0",
                     "maximum": "24"
@@ -45,7 +69,7 @@
                 {
                     "type": "NumberSpinner",
                     "name": "ExecutionMinute",
-                    "caption": "Minute",
+                    "caption": "Daily - Minute",
                     "suffix": "",
                     "minimum": "0",
                     "maximum": "59"
@@ -53,10 +77,18 @@
                 {
                     "type": "NumberSpinner",
                     "name": "ExecutionInterval",
-                    "caption": "Interval",
+                    "caption": "Daily - Interval",
                     "suffix": "days",
                     "minimum": "1",
                     "maximum": "7"
+                },
+                {
+                    "type": "NumberSpinner",
+                    "name": "ExecutionMinuteMinute",
+                    "caption": "Minute based Timer - Minute",
+                    "suffix": "",
+                    "minimum": "1",
+                    "maximum": "59"
                 }
             ]
         },
@@ -118,6 +150,11 @@
             "type": "CheckBox",
             "name": "Webfront_HTML",
             "caption": "Create HTML Box for webfront"
+        },
+        {
+            "type": "CheckBox",
+            "name": "Variable_Output",
+            "caption": "Store results in variable"
         },
         {
             "type": "CheckBox",
