@@ -72,7 +72,7 @@ class ProfileMonitor extends IPSModule {
 
 		$vpos = 10;
 		$this->MaintainVariable('Webfront_Message_Box', $this->Translate('Webfront Messagebox'), vtString, '~HTMLBox', $vpos++,$this->ReadPropertyBoolean('Webfront_HTML') == 1);
-		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor RAW'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == 1);
+		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == 1);
 
 		$ActiveID= @IPS_GetObjectIDByIdent('Active', $this->InstanceID);
 		if (IPS_GetObject($ActiveID)['ObjectType'] == 2) {
@@ -117,12 +117,11 @@ class ProfileMonitor extends IPSModule {
 				if (strlen($profileName) > 0) {
 					foreach ($Profiles as $pName => $pValue)
 					{
-						if ($profileName == $pName)
-						{
+						if ($profileName == $pName)	{
 							if (is_bool($pValue)) {
 								if ($value == $pValue) {
 									
-									if (json_decode($IDs2Ignore,true) != null){
+									if (json_decode($IDs2Ignore,true) != null) {
 										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
 											$IgnoreID = $IgnoreID["ID2Ignore"];
 											if ($VariableID != $IgnoreID) { 
@@ -136,11 +135,10 @@ class ProfileMonitor extends IPSModule {
 									}
 								}
 							}
-							else
-							{
+							else {
 								if ($value <= $pValue) {
 									//foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-									if (json_decode($IDs2Ignore,true) != null){
+									if (json_decode($IDs2Ignore,true) != null) {
 									foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
 										$IgnoreID = $IgnoreID["ID2Ignore"];
 										if ($VariableID != $IgnoreID) { 
@@ -183,7 +181,11 @@ class ProfileMonitor extends IPSModule {
 					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
 
-					$result_json .= '"ID": "'.$VariableID.'",';
+					if ($result_json == null) {
+						$result_json .= "{";
+					}
+
+					$result_json .= '"'.IPS_GetName($VariableID).'": "'.$VariableID.'",';
 				}
 			}
 		}
@@ -195,7 +197,15 @@ class ProfileMonitor extends IPSModule {
 			//$result      = '<table><tr><td><b>Device</b></td><td></td></tr>Nothing found</table>'; 
 			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
 			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
-			SetValueString($Webfront_Message_BoxID, $result);
+
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
+				SetValueString($Webfront_Message_BoxID, $result);
+			}
+
+			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	{
+				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
+				SetValueString($Profile_Monitor_RAW, "{}");
+			}
 		}
 		else {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
@@ -221,26 +231,24 @@ class ProfileMonitor extends IPSModule {
 				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
 
-			if ($this->ReadPropertyBoolean('Variable_Output') == 1)
+			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	
 			{
 				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
 
 				$result_json = rtrim($result_json, ',');
-				SetValueString($Profile_Monitor_RAW, $result_json);
+				SetValueString($Profile_Monitor_RAW, $result_json."}");
 			}
 
 
 			if ($NotifyByEmail == 1) 
 			{
-				if ($result == "") 
-				{
+				if ($result == "") {
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKText"));
 					$this->EmailApp();
 				}
-				elseif ($result != "") 
-				{
+				elseif ($result != "") {
 					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
 					$this->SetBuffer("NotifierMessage",$resultemail);
@@ -248,17 +256,14 @@ class ProfileMonitor extends IPSModule {
 				}
 			}
 
-			if ($NotifyByApp == 1) 
-			{
-				if ($result == "") 
-				{
+			if ($NotifyByApp == 1) {
+				if ($result == "") {
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKTextApp"));
 					$this->NotifyApp();
 				}
-				elseif ($result != "") 
-				{
+				elseif ($result != "") {
 					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationErrorTextApp"));
@@ -308,7 +313,8 @@ class ProfileMonitor extends IPSModule {
 		$Active = $this->ReadPropertyBoolean("Active");
 
 		if ($Active == 1) {
-			if ($this->ReadPropertyInteger("ExecutionHour") == 0) {
+			$this->SetStatus(102);
+			if ($this->ReadPropertyInteger("TimerMethod") == 0) {
 				$Hour = $this->ReadPropertyInteger("ExecutionHour");
 				$Minute = $this->ReadPropertyInteger("ExecutionMinute");
 				$ExecutionInterval = $this->ReadPropertyInteger("ExecutionInterval");
@@ -329,12 +335,14 @@ class ProfileMonitor extends IPSModule {
 				$Timer = $diff * 1000;
 				$this->SetTimerInterval('Profile Monitor', $Timer);
 			}
-			else if ($this->ReadPropertyInteger("ExecutionHour") == 1) {
+			else if ($this->ReadPropertyInteger("TimerMethod") == 1) {
 				$Minute = $this->ReadPropertyInteger("ExecutionMinuteMinute");
-				$Timer = $Minute * 1000;
+				$Timer = $Minute * 60000;
 				$this->SetTimerInterval('Profile Monitor', $Timer);
 			}
+		}
 		else if ($Active == 0) {
+			$this->SetStatus(104);
 			$this->SetTimerInterval('Profile Monitor', 0);
 		}
 	} 

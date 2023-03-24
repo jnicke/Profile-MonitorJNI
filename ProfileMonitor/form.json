@@ -27,33 +27,32 @@
             "label": "Profile Monitor - Configuration"
         },
         {
-            "type": "RowLayout",
-            "items": [
-                {
-                    "type": "CheckBox",
-                    "name": "Active",
-                    "caption": "Active"
-                },
-                {
-                    "type": "Select",
-                    "name": "TimerMethod",
-                    "caption": "Check Timer Method",
-                    "options": [
-                        {
-                            "caption": "Timer based on Days",
-                            "value": 0
-                        },
-                        {
-                            "caption": "Timer based on Minutes",
-                            "value": 1
-                        }
-                    ]
-                }
-            ]
+            "type": "CheckBox",
+            "name": "Active",
+            "caption": "Active"
+        },
+        {
+            "type": "Label",
+            "label": ""
         },
         {
             "type": "Label",
             "label": "Timer - Configuration"
+        },
+        {
+            "type": "Select",
+            "name": "TimerMethod",
+            "caption": "Check Timer Method",
+            "options": [
+                {
+                    "caption": "Timer based on Days",
+                    "value": 0
+                },
+                {
+                    "caption": "Timer based on Minutes",
+                    "value": 1
+                }
+            ]
         },
         {
             "type": "RowLayout",
@@ -91,6 +90,14 @@
                     "maximum": "59"
                 }
             ]
+        },
+        {
+            "type": "Label",
+            "label": ""
+        },
+        {
+            "type": "Label",
+            "label": "Profiles to be monitored"
         },
         {
             "type": "List",
@@ -154,7 +161,7 @@
         {
             "type": "CheckBox",
             "name": "Variable_Output",
-            "caption": "Store results in variable"
+            "caption": "Store results as JSON in variable"
         },
         {
             "type": "CheckBox",
