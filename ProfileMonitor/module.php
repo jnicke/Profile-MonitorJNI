@@ -43,49 +43,39 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyString("NotificationErrorTextApp","Es wurde mindestens eine schwache Batterie gefunden");
 		$this->RegisterPropertyBoolean("NotifyByEmail", 0);
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
-		//$this->RegisterPropertyInteger("NotificationType", "0");
 		$this->RegisterPropertyInteger("EmailVariable", 0);
 		$this->RegisterPropertyInteger("WebfrontVariable", 0);
-
 		$this->RegisterPropertyInteger("ExecutionHour","18");
 		$this->RegisterPropertyInteger("ExecutionMinute","00");
 		$this->RegisterPropertyInteger("ExecutionInterval","3");
-
-		//$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		$this->RegisterPropertyString("HTML_Header_Event","Keine Module mit leerer Batterie");
 
+		$this->RegisterVariableString("LastUpdate",$this->Translate('Last Update'));
 		$this->RegisterVariableBoolean("Warning",$this->Translate('Warning'),'~Alert');
+		$this->RegisterVariableBoolean("RemoteTrigger",$this->Translate('Remote Trigger'),'~Switch');
 		$this->RegisterVariableInteger("Devices_With_Empty_Battery",$this->Translate('Device with empty battery'));
+		$this->RegisterMessage(IPS_GetObjectIDByIdent("RemoteTrigger", $this->InstanceID), VM_UPDATE);
 
+		$this->EnableAction("RemoteTrigger");	
 
-		//$this->EnableAction("Active");
-
-		//Component sets timer, but default is OFF
 		$this->RegisterTimer("Profile Monitor",0,"BW_Check(\$_IPS['TARGET']);");
 
 	}
 
 	public function ApplyChanges() {
-
 		//Never delete this line!
 		parent::ApplyChanges();
 
 		$vpos = 10;
 		$this->MaintainVariable('Webfront_Message_Box', $this->Translate('Webfront Messagebox'), vtString, '~HTMLBox', $vpos++,$this->ReadPropertyBoolean('Webfront_HTML') == 1);
 		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == 1);
-
-		$ActiveID= @IPS_GetObjectIDByIdent('Active', $this->InstanceID);
-		if (IPS_GetObject($ActiveID)['ObjectType'] == 2) {
-			$this->RegisterMessage($ActiveID, VM_UPDATE);
-		}
-
 		$this->SetResetTimerInterval();
 
 	}
 
 	public function Check() {
 
-		//$Profiles = array("~Battery" => true, "~Battery.Reversed" => false, "~Battery.100" => 25);
+		SetValueString($this->GetIDForIdent("LastUpdate"), date("Y-m-d H:i:s"));
 		
 		$NotifyByApp = $this->ReadPropertyBoolean("NotifyByApp");
 		$NotifyByEmail = $this->ReadPropertyBoolean("NotifyByEmail");
@@ -139,12 +129,12 @@ class ProfileMonitor extends IPSModule {
 								if ($value <= $pValue) {
 									//foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
 									if (json_decode($IDs2Ignore,true) != null) {
-									foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-										$IgnoreID = $IgnoreID["ID2Ignore"];
-										if ($VariableID != $IgnoreID) { 
-											$warning = true;
-										} 
-									}
+										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+											$IgnoreID = $IgnoreID["ID2Ignore"];
+											if ($VariableID != $IgnoreID) { 
+												$warning = true;
+											} 
+										}
 									}
 									else {
 										//var_dump($VariableID);
@@ -194,7 +184,6 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","No empty batteries have been found.", 0);
 			SetValueBoolean($WarningVariableID, false);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
-			//$result      = '<table><tr><td><b>Device</b></td><td></td></tr>Nothing found</table>'; 
 			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
 			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 
@@ -211,7 +200,6 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
-			//$result      = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorHeader").'</b></td><td><b>ID</b></td></tr>' . $result .'</table>'; 
 			
 			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
 			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
@@ -225,14 +213,12 @@ class ProfileMonitor extends IPSModule {
 			}
 			$HTMLBox .= '</tr>'.$result.'</table>';
 			
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) 
-			{
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
 				$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
 
-			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	
-			{
+			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	{
 				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
 
 				$result_json = rtrim($result_json, ',');
@@ -240,8 +226,7 @@ class ProfileMonitor extends IPSModule {
 			}
 
 
-			if ($NotifyByEmail == 1) 
-			{
+			if ($NotifyByEmail == 1) {
 				if ($result == "") {
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
@@ -275,6 +260,7 @@ class ProfileMonitor extends IPSModule {
 
 	public function EmailApp() {
 		$EmailVariable = $this->ReadPropertyInteger("EmailVariable");
+		
 		if ($EmailVariable != "") {
 			$NotifierSubject = $this->GetBuffer("NotifierSubject");
 			$NotifierMessage = $this->GetBuffer("NotifierMessage");
@@ -293,6 +279,7 @@ class ProfileMonitor extends IPSModule {
 
 	public function NotifyApp() {
 		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
+		
 		if ($WebfrontVariable != "") {
 			$NotifierTitle = $this->GetBuffer("NotifierSubject");
 			$NotifierMessage = $this->GetBuffer("NotifierMessage");
@@ -347,45 +334,16 @@ class ProfileMonitor extends IPSModule {
 		}
 	} 
 
-	/*
-
 	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)	{
-
 		//$this->SendDebug("Sender",$SenderID." ".$Message." ".$Data, 0);
-
-		$IP = $this->ReadPropertyString("IP");
-		$UnreachCounter = $this->GetBuffer("UnreachCounter");
-
-		if ($SenderID == $this->GetIDForIdent('Active')) {
-
-			$SenderValue = GetValue($SenderID);
-			if ($SenderValue == 1) {
-				$this->SendDebug("System","Module activated", 0);
-				$TimerMS = $this->ReadPropertyInteger("Timer") * 1000;
-				$this->SetTimerInterval("WLAN BBQ Thermometer",$TimerMS);
-				$this->SetBuffer("UnreachCounter",0);
-				$this->GetReadings();
-			}
-			else {
-				$this->SetTimerInterval("WLAN BBQ Thermometer", "0");
-				$this->ArchiveCleaning();
-				$this->UnsetValuesAtShutdown();
-				$this->SendDebug("System","Switching module off", 0);
-			}
+		if ($SenderID == $this->GetIDForIdent('RemoteTrigger') AND GetValue($SenderID) == true) {
+			SetValueBoolean($this->GetIDForIdent('RemoteTrigger'),false);
+			$this->Check();
 		}
-		else {
-
-		}
-
-
 	}
 	
 	public function RequestAction($Ident, $Value) {
-
 		$this->SetValue($Ident, $Value);
-
 	}
-
-	*/
 
 }

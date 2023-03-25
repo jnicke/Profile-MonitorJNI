@@ -38,3 +38,5 @@ The module queries every x days at a defined time all variables where a battery 
 1.2 - 25-03-2023
 * New - Added second timer option, allowing to check profiles every xx minutes
 * New - Results can be stored in variable as a JSON
+* New - Variable that captures the time of the check
+* New - The possibility to trigger the module manually - e.g. via the webfront

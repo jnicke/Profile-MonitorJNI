@@ -50,7 +50,9 @@
 			"Webfront Messagebox": "Webfront Variable",
 			"Warning Empty Batteries": "Warnung leere Batterien",
 			"Device with empty battery": "Geräte mit leerer Batterie",
-			"Test & Check Profiles": "Teste & Prüfe Profile"
+			"Test & Check Profiles": "Teste & Prüfe Profile",
+			"Last Update": "Letztes Update",
+			"Remote Trigger": "Manuelles Auslösen"
 		}
 	}
 }
