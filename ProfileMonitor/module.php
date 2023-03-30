@@ -194,7 +194,7 @@ class ProfileMonitor extends IPSModule {
 
 			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	{
 				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
-				SetValueString($Profile_Monitor_RAW, "{}");
+				SetValueString($Profile_Monitor_RAW, "[]");
 			}
 		}
 		else {
