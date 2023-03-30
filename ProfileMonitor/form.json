@@ -135,14 +135,14 @@
                     "type": "List",
                     "name": "IDs2Ignore",
                     "caption": "Variables to ignore",
-                    "rowCount": 5,
+                    "rowCount": 15,
                     "add": true,
                     "delete": true,
                     "columns": [
                         {
                             "caption": "Variable",
                             "name": "ID2Ignore",
-                            "width": "300",
+                            "width": "auto",
                             "add": 0,
                             "edit": {
                                 "type": "SelectObject",

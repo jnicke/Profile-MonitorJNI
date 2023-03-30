@@ -172,10 +172,11 @@ class ProfileMonitor extends IPSModule {
 					$device_count++;
 
 					if ($result_json == null) {
-						$result_json .= "{";
+						$result_json .= "{IDs:[";
 					}
 
-					$result_json .= '"'.IPS_GetName($VariableID).'": "'.$VariableID.'",';
+					//$result_json .= '"'.IPS_GetName($VariableID).'": "'.$VariableID.'",';
+					$result_json .= $VariableID.',';
 				}
 			}
 		}
@@ -222,7 +223,7 @@ class ProfileMonitor extends IPSModule {
 				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
 
 				$result_json = rtrim($result_json, ',');
-				SetValueString($Profile_Monitor_RAW, $result_json."}");
+				SetValueString($Profile_Monitor_RAW, $result_json."]}");
 			}
 
 
