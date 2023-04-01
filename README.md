@@ -40,3 +40,4 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - Ergebnisse kann in Variable als JSON gespeichert werden
 * Neu - Variable die den Zeitpunkt der Prüfung erfasst
 * Neu - Die Möglichkeit das Modul manuell auszulöen - z.B. über das Webfront
+* Fix - HTML Box Error wenn nicht konfiguriert

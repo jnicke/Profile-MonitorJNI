@@ -40,3 +40,4 @@ The module queries every x days at a defined time all variables where a battery 
 * New - Results can be stored in variable as a JSON
 * New - Variable that captures the time of the check
 * New - The possibility to trigger the module manually - e.g. via the webfront
+* Fix - HTML Box Error if not configured 
