@@ -186,7 +186,10 @@ class ProfileMonitor extends IPSModule {
 			SetValueBoolean($WarningVariableID, false);
 			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
 			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
-			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
+                $Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
+                SetValueString($Webfront_Message_BoxID, $result);
+            }
 
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
 				SetValueString($Webfront_Message_BoxID, $result);
