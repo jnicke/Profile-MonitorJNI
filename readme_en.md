@@ -35,7 +35,7 @@ The module queries every x days at a defined time all variables where a battery 
 * New - selection of a webfront is possible
 * Fix - if no variables were found, webfront was not cleared
 
-1.2 - 25-03-2023
+1.2 - 01-04-2023
 * New - Added second timer option, allowing to check profiles every xx minutes
 * New - Results can be stored in variable as a JSON
 * New - Variable that captures the time of the check
