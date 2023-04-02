@@ -8,16 +8,23 @@
 			"The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them.": "Die Standardwerte prüfen auf leere Batterien - wenn Sie auf etwas anderes prüfen wollen, löschen Sie einfach die Standardwerte und ersetzen Sie sie.",
 			"Profile Monitor - Configuration": "Profil Überwachnung - Konfiguration",			
 			"Active": "Aktiv",
-			"Hour": "Stunde",
-			"Minute": "Minute",
-			"Interval": "Intervall",
-			"Days": "Tage",
+			"Check Timer Method": "Art des Prüfintervals",
+			"Timer - Configuration": "Konfiguration der Prüfhäufigkeit",
+			"Timer based on Days": "Prüfen alle x Tage um y Uhr",
+			"Timer based on Minutes": "Prüfen alle x Minuten",
+			"Daily - Hour": "Tagesinterval - Stunde",
+			"Daily - Minute": "Tagesinterval - Minute",
+			"Daily - Interval": "Tagesinterval - Häufigkeit",
+			"Minute based Timer - Minute": "Minuten basierender Timer - Minuten",
+			"days": "Tage",
 			"Every x Days": "Alle x Tage",
 			"Profiles to monitor - Default for empty batteries": "Profile die Überwacht werden sollen - Standard für leere Batterien",
 			"Variables to ignore": "Variablen die ignoriert werden sollen",
+			"Profiles to be monitored": "Profile die überwacht werden sollen",
 			"Profile Name": "Name des Profils",
 			"Profile Value": "Wert des Profils",
 			"Create HTML Box for webfront": "Daten in HTML Box für Webfront bereitstellen",
+			"Store results as JSON in variable": "Ergebnis als JSON in Variable speichern",
 			"Notify by Email": "Email Benachrichtigung",
 			"Notify by App": "App Benachrichtigung",
 			"Email ID Selection": "ID SMTP-Email Konfiguration",
@@ -43,7 +50,9 @@
 			"Webfront Messagebox": "Webfront Variable",
 			"Warning Empty Batteries": "Warnung leere Batterien",
 			"Device with empty battery": "Geräte mit leerer Batterie",
-			"Test & Check Profiles": "Teste & Prüfe Profile"
+			"Test & Check Profiles": "Teste & Prüfe Profile",
+			"Last Update": "Letztes Update",
+			"Remote Trigger": "Manuelles Auslösen"
 		}
 	}
 }

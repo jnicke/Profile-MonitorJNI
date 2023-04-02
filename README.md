@@ -34,3 +34,10 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - Im Webfront ist es nun möglich ID, Parent Object und Pfad anzuzeigen
 * Neu - Auswahl eine Webfronts ist möglich
 * Fix - wenn keine Variablen gefunden wurden, wurde Webfront nicht geleert
+
+1.2 - 01-04-2023
+* Neu - Zweite Timer-Option hinzugefügt, mit der Profile alle xx Minuten überprüft werden können
+* Neu - Ergebnisse kann in Variable als JSON gespeichert werden
+* Neu - Variable die den Zeitpunkt der Prüfung erfasst
+* Neu - Die Möglichkeit das Modul manuell auszulösen - z.B. über das Webfront
+* Fix - HTML Box Error wenn nicht konfiguriert
