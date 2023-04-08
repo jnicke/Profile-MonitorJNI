@@ -41,3 +41,8 @@ The module queries every x days at a defined time all variables where a battery 
 * New - Variable that captures the time of the check
 * New - The possibility to trigger the module manually - e.g. via the webfront
 * Fix - HTML Box Error if not configured 
+
+1.3 - 08-04-2023
+* New - All variables that were checked can be saved to a variable as JSON
+* New - It is possible to save the triggering value in the HTML table
+* Fix - The HTML variable works also with the Light Skin

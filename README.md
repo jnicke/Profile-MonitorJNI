@@ -41,3 +41,8 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - Variable die den Zeitpunkt der Prüfung erfasst
 * Neu - Die Möglichkeit das Modul manuell auszulösen - z.B. über das Webfront
 * Fix - HTML Box Error wenn nicht konfiguriert
+
+1.3 - 08-04-2023
+* Neu - All Variablen die geprüft wurden können in eine Variable als JSON gespeichert werden
+* Neu - Es ist möglich der auslösenden Wert zu in der HTML Tabelle zu speichern
+* Fix - Die HTML Variable funktioniert auch mit dem Light Skin
