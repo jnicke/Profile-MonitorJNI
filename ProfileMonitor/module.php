@@ -69,9 +69,9 @@ class ProfileMonitor extends IPSModule {
 		parent::ApplyChanges();
 
 		$vpos = 10;
-		$this->MaintainVariable('Webfront_Message_Box', $this->Translate('Webfront Messagebox'), vtString, '~HTMLBox', $vpos++,$this->ReadPropertyBoolean('Webfront_HTML') == 1);
-		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == 1);
-		$this->MaintainVariable('Profile_Monitor_AllCheckedVariables', $this->Translate('Profile Monitor all checked variable JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('All_Variable_Output') == 1);
+		$this->MaintainVariable('Webfront_Message_Box', $this->Translate('Webfront Messagebox'), vtString, '~HTMLBox', $vpos++,$this->ReadPropertyBoolean('Webfront_HTML') == true);
+		$this->MaintainVariable('Profile_Monitor_RAW', $this->Translate('Profile Monitor JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('Variable_Output') == true);
+		$this->MaintainVariable('Profile_Monitor_AllCheckedVariables', $this->Translate('Profile Monitor all checked variable JSON'), vtString, '', $vpos++,$this->ReadPropertyBoolean('All_Variable_Output') == true);
 		$this->SetResetTimerInterval();
 
 	}
@@ -110,7 +110,6 @@ class ProfileMonitor extends IPSModule {
 				$value = GetValue($VariableID);
 				$profileName = IPS_VariableProfileExists($variableData['VariableProfile']) ? $variableData['VariableProfile'] : "";
 				$profileName = (strlen($variableData['VariableCustomProfile']) > 0 && IPS_VariableProfileExists($variableData['VariableCustomProfile'])) ? $variableData['VariableCustomProfile'] : $profileName;
-
 				$warning = false;
 				if (strlen($profileName) > 0) {
 					foreach ($Profiles as $pName => $pValue)
@@ -157,33 +156,16 @@ class ProfileMonitor extends IPSModule {
 				}
 
 				if ($warning) {
-					//$result .= "<em>".IPS_GetLocation($VariableID)."</em>: ".GetValueFormatted($VariableID)."<br />";
-					$textColor = ($value < -100 ? '#B40404' : '#0B610B'); 
-					$color  = ' style="background-color:'.$this->ReadPropertyString("HTMLBoxBackgroundColor").'; color:'.$this->ReadPropertyString("HTMLBoxTextColor").';"'; 
-					$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
-					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID) . '</td><td align="center"' . $color2 . '> ' . ($value == true ? 'Low Bat' : 'OK') . ' </td></tr>'; // </br>
-					//$result .= '<tr><td' . $color . '>' . IPS_GetLocation($VariableID); // </br>
-					
-					//$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td><td' . $color . '>'.$VariableID.'</td>'; // </br> HTMLBoxParent
-					/*
-					$result .= '<tr><td' . $color . '>'.IPS_GetName($VariableID).'</td>';
-					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-						$result .= '<td' . $color . '>'.$VariableID.'</td>'; // </br>
-					}
-					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-						$result .= '<td' . $color . '>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
-					}
-					if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-						$result .= '<td' . $color . '>'.IPS_GetLocation($VariableID).'</td>'; // </br>
-					}
-					*/
+					//$textColor = ($value < -100 ? '#B40404' : '#0B610B'); 
+					//$color  = ' style="background-color:'.$this->ReadPropertyString("HTMLBoxBackgroundColor").'; color:'.$this->ReadPropertyString("HTMLBoxTextColor").';"'; 
+					//$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 
 					$result .= '<tr><td>'.IPS_GetName($VariableID).'</td>';
 					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
 						$result .= '<td>'.$VariableID.'</td>'; // </br>
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-						$result .= '<td>'.$value.'</td>'; // </br>
+						$result .= '<td>'.GetValueFormatted($VariableID).'</td>';
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
 						$result .= '<td>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
@@ -199,7 +181,6 @@ class ProfileMonitor extends IPSModule {
 						$result_json .= "[";
 					}
 
-					//$result_json .= '"'.IPS_GetName($VariableID).'": "'.$VariableID.'",';
 					$result_json .= $VariableID.',';
 				}
 			}
@@ -208,65 +189,64 @@ class ProfileMonitor extends IPSModule {
 		if ($result == "") {
 			$this->SendDebug("Battery Monitor","No empty batteries have been found.", 0);
 			SetValueBoolean($WarningVariableID, false);
-			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),"0");
+			$this->SetValue('Devices_With_Empty_Battery', "0");
 			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
                 $Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
                 SetValueString($Webfront_Message_BoxID, $result);
             }
 
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
 				SetValueString($Webfront_Message_BoxID, $result);
 			}
 
-			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	{
-				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
-				SetValueString($Profile_Monitor_RAW, "[]");
+			if ($this->ReadPropertyBoolean('Variable_Output') == true)	{
+				$this->SetValue('Profile_Monitor_RAW', "[]");
+			}
+			if ($this->ReadPropertyBoolean('All_Variable_Output') == true)	{
+				$checked_variable_json = rtrim($checked_variable_json, ',');
+				$this->SetValue('Profile_Monitor_AllCheckedVariables', $checked_variable_json."]");
 			}
 		}
 		else {
 			$this->SendDebug("Battery Monitor","Devices with empty batteries have been detected.", 0);
 			SetValueBoolean($WarningVariableID, true);
-			SetValueInteger($this->GetIDForIdent('Devices_With_Empty_Battery'),$device_count);
+			$this->SetValue('Devices_With_Empty_Battery', $device_count);
 			
 			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
 			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-				$HTMLBox .= '<td><b>ID</b></td>'; // </br>
+				$HTMLBox .= '<td><b>ID</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-				$HTMLBox .= '<td><b>Value</b></td>'; // </br>
+				$HTMLBox .= '<td><b>Value</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>'; // </br>
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>';
 			}
 			if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>'; // </br>
+				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>';
 			}
 			$HTMLBox .= '</tr>'.$result.'</table>';
 			
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == 1) {
+			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
 				$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 				SetValueString($Webfront_Message_BoxID, $HTMLBox);
 			}
 
-			if ($this->ReadPropertyBoolean('Variable_Output') == 1)	{
-				$Profile_Monitor_RAW = $this->GetIDForIdent('Profile_Monitor_RAW');
-
+			if ($this->ReadPropertyBoolean('Variable_Output') == true)	{
 				$result_json = rtrim($result_json, ',');
-				SetValueString($Profile_Monitor_RAW, $result_json."]");
+				$this->SetValue('Profile_Monitor_RAW', $result_json."]");
 			}
 
-			if ($this->ReadPropertyBoolean('All_Variable_Output') == 1)	{
-				$Profile_Monitor_AllCheckedVariables = $this->GetIDForIdent('Profile_Monitor_AllCheckedVariables');
-
+			if ($this->ReadPropertyBoolean('All_Variable_Output') == true)	{
 				$checked_variable_json = rtrim($checked_variable_json, ',');
-				SetValueString($Profile_Monitor_AllCheckedVariables, $checked_variable_json."]");
+				$this->SetValue('Profile_Monitor_AllCheckedVariables', $checked_variable_json."]");
 			}
 
 
-			if ($NotifyByEmail == 1) {
+			if ($NotifyByEmail == true) {
 				if ($result == "") {
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
@@ -281,7 +261,7 @@ class ProfileMonitor extends IPSModule {
 				}
 			}
 
-			if ($NotifyByApp == 1) {
+			if ($NotifyByApp == true) {
 				if ($result == "") {
 					$this->SendDebug("Email","Will try to send email - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
@@ -339,7 +319,7 @@ class ProfileMonitor extends IPSModule {
 	public function SetResetTimerInterval() {
 		$Active = $this->ReadPropertyBoolean("Active");
 
-		if ($Active == 1) {
+		if ($Active == true) {
 			$this->SetStatus(102);
 			if ($this->ReadPropertyInteger("TimerMethod") == 0) {
 				$Hour = $this->ReadPropertyInteger("ExecutionHour");
@@ -368,7 +348,7 @@ class ProfileMonitor extends IPSModule {
 				$this->SetTimerInterval('Profile Monitor', $Timer);
 			}
 		}
-		else if ($Active == 0) {
+		else if ($Active == false) {
 			$this->SetStatus(104);
 			$this->SetTimerInterval('Profile Monitor', 0);
 		}
