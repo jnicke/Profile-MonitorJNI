@@ -165,6 +165,11 @@
         },
         {
             "type": "CheckBox",
+            "name": "All_Variable_Output",
+            "caption": "Store all checked variables as JSON in variable"
+        },
+        {
+            "type": "CheckBox",
             "name": "NotifyByEmail",
             "caption": "Notify by Email"
         },
@@ -203,6 +208,11 @@
                     "type": "CheckBox",
                     "name": "HTMLBoxID",
                     "caption": "Display ID"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "HTMLBoxValue",
+                    "caption": "Display Value"
                 },
                 {
                     "type": "CheckBox",
