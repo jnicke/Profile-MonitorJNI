@@ -225,6 +225,11 @@
                     "caption": "Display Location"
                 },
                 {
+                    "type": "CheckBox",
+                    "name": "HTMLBoxLastUpdate",
+                    "caption": "Display Last Update"
+                },
+                {
                     "type": "ValidationTextBox",
                     "name": "HTMLBoxParentTranslation",
                     "caption": "Table header - Parent Object",
@@ -235,6 +240,14 @@
                     "name": "HTMLBoxLocationTranslation",
                     "caption": "Table header - Location in Object Tree",
                     "width": "100%"
+                },
+                {
+                    "type": "NumberSpinner",
+                    "name": "HTMLBoxCellPadding",
+                    "caption": "Padding between values",
+                    "suffix": "pixel",
+                    "minimum": "0",
+                    "maximum": "50"
                 }
             ]
         },
