@@ -31,10 +31,13 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyString("HTMLBoxNothingFound","Keine Komponenten gefunden");
 		$this->RegisterPropertyString("HTMLBoxParentTranslation","Ursprungsobjekt");
 		$this->RegisterPropertyString("HTMLBoxLocationTranslation","Ort im Objektbaum");
+		$this->RegisterPropertyString("HTMLBoxLastUpdateTranslation","Aktualisiert");
 		$this->RegisterPropertyBoolean("HTMLBoxID",true);
 		$this->RegisterPropertyBoolean("HTMLBoxValue",false);
 		$this->RegisterPropertyBoolean("HTMLBoxParent",false);
 		$this->RegisterPropertyBoolean("HTMLBoxLocation",false);
+		$this->RegisterPropertyBoolean("HTMLBoxLastUpdate",false);
+		$this->RegisterPropertyInteger("HTMLBoxCellPadding", "10");
 		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
 		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
@@ -161,17 +164,20 @@ class ProfileMonitor extends IPSModule {
 					//$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 
 					$result .= '<tr><td>'.IPS_GetName($VariableID).'</td>';
-					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-						$result .= '<td>'.$VariableID.'</td>'; // </br>
+					if ($this->ReadPropertyBoolean("HTMLBoxID")) {      
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.$VariableID.'</td>'; // </br>
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-						$result .= '<td>'.GetValueFormatted($VariableID).'</td>';
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.GetValueFormatted($VariableID).'</td>';
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-						$result .= '<td>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-						$result .= '<td>'.IPS_GetLocation($VariableID).'</td>'; // </br>
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.IPS_GetLocation($VariableID).'</td>'; // </br>
+					}
+					if ($this->ReadPropertyBoolean("HTMLBoxLastUpdate")) {
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.date("Y-m-d H:i:s", IPS_GetVariable($VariableID)["VariableChanged"]).'</td>'; // </br>
 					}
 
 					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
@@ -215,18 +221,21 @@ class ProfileMonitor extends IPSModule {
 			
 			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
 			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-				$HTMLBox .= '<td><b>ID</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>ID</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-				$HTMLBox .= '<td><b>Value</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>Value</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>';
 			}
 			if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>';
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxLastUpdate")) {
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxLastUpdateTranslation").'</b></td>';
 			}
 			$HTMLBox .= '</tr>'.$result.'</table>';
 			
