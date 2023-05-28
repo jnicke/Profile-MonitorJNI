@@ -46,3 +46,7 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - All Variablen die geprüft wurden können in eine Variable als JSON gespeichert werden
 * Neu - Es ist möglich der auslösenden Wert zu in der HTML Tabelle zu speichern
 * Fix - Die HTML Variable funktioniert auch mit dem Light Skin
+
+1.4 - 28-05-2023
+* Neu - Datum der letzten Aktualisierung kann angezeigt werden
+* Neu - Abstand bei HTML Tabelle einstellbar
