@@ -193,18 +193,6 @@
             "caption": "HTML Box Configuration & Translation",
             "items": [
                 {
-                    "type": "ValidationTextBox",
-                    "name": "HTMLBoxAktorName",
-                    "caption": "HTML Box Actor Objectname",
-                    "width": "100%"
-                },
-                {
-                    "type": "ValidationTextBox",
-                    "name": "HTMLBoxNothingFound",
-                    "caption": "HTML Box Nothing found text",
-                    "widthUr": "100%"
-                },
-                {
                     "type": "CheckBox",
                     "name": "HTMLBoxID",
                     "caption": "Display ID"
@@ -212,7 +200,7 @@
                 {
                     "type": "CheckBox",
                     "name": "HTMLBoxValue",
-                    "caption": "Display Value"
+                    "caption": "Object Name"
                 },
                 {
                     "type": "CheckBox",
@@ -228,6 +216,18 @@
                     "type": "CheckBox",
                     "name": "HTMLBoxLastUpdate",
                     "caption": "Display Last Update"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "HTMLBoxAktorName",
+                    "caption": "HTML Box Actor Objectname",
+                    "width": "100%"
+                },
+                {
+                    "type": "ValidationTextBox",
+                    "name": "HTMLBoxNothingFound",
+                    "caption": "HTML Box Nothing found text",
+                    "widthUr": "100%"
                 },
                 {
                     "type": "ValidationTextBox",
@@ -255,6 +255,26 @@
             "type": "ExpansionPanel",
             "caption": "Message Configuration & Translation",
             "items": [
+                {
+                    "type": "CheckBox",
+                    "name": "EmailValue",
+                    "caption": "Object Name"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "EmailParent",
+                    "caption": "Display Parent"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "EmailID",
+                    "caption": "Display ID"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "EmailLocation",
+                    "caption": "Display Location"
+                },
                 {
                     "type": "ValidationTextBox",
                     "name": "NotificationOKSubject",
