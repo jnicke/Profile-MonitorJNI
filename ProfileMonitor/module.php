@@ -228,7 +228,7 @@ class ProfileMonitor extends IPSModule {
 			$this->SetValue('Devices_With_Empty_Battery', "0");
 			//$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
 			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</b></th></tr></table>'; 
-			var_dump($HTMLBox);
+			//var_dump($HTMLBox);
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
                 $Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
 				SetValueString($Webfront_Message_BoxID, $HTMLBox);
