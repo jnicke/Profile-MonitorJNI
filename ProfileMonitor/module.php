@@ -39,6 +39,10 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("HTMLBoxLastUpdate",false);
 		$this->RegisterPropertyInteger("HTMLBoxCellPadding", "10");
 		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
+		$this->RegisterPropertyBoolean("EmailID",true);
+		$this->RegisterPropertyBoolean("EmailValue",false);
+		$this->RegisterPropertyBoolean("EmailParent",false);
+		$this->RegisterPropertyBoolean("EmailLocation",false);
 		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
@@ -99,8 +103,12 @@ class ProfileMonitor extends IPSModule {
 		$result = "";
 		$result_json = "";
 		$checked_variable_json = "";
+		//$resultemail = '<html><body>';
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
 		$device_count = 0;
+
+		$this->SendDebug("","", 0);
+		$this->SendDebug("Profile Monitor","********** Checking **********", 0);
 
 		$VariableIDs = IPS_GetVariableList();
 		foreach($VariableIDs as $VariableID) {
@@ -121,14 +129,18 @@ class ProfileMonitor extends IPSModule {
 							$checked_variable_json .= $VariableID.',';
 							if (is_bool($pValue)) {
 								if ($value == $pValue) {
-									
 									if (json_decode($IDs2Ignore,true) != null) {
+										$IgnoreIDArray = [];
 										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-											$IgnoreID = $IgnoreID["ID2Ignore"];
-											if ($VariableID != $IgnoreID) { 
-												$warning = true;
-											} 
-										}
+											array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
+										} 												
+										if (!in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning MATCHING and is not ignored.", 0);
+											$warning = true;
+										} 
+										elseif (in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning MATCHING and is IGNORED.", 0);
+										} 								
 									}
 									else {
 										//var_dump($VariableID);
@@ -138,14 +150,18 @@ class ProfileMonitor extends IPSModule {
 							}
 							else {
 								if ($value <= $pValue) {
-									//foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
 									if (json_decode($IDs2Ignore,true) != null) {
+										$IgnoreIDArray = [];
 										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-											$IgnoreID = $IgnoreID["ID2Ignore"];
-											if ($VariableID != $IgnoreID) { 
-												$warning = true;
-											} 
-										}
+											array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
+										} 												
+										if (!in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is not ignored.", 0);
+											$warning = true;
+										} 
+										elseif (in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is IGNORED.", 0);
+										} 
 									}
 									else {
 										//var_dump($VariableID);
@@ -180,7 +196,21 @@ class ProfileMonitor extends IPSModule {
 						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.date("Y-m-d H:i:s", IPS_GetVariable($VariableID)["VariableChanged"]).'</td>'; // </br>
 					}
 
-					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
+					if ($this->ReadPropertyBoolean("EmailValue")) {
+						$resultemail .= " Name: ".IPS_GetName($VariableID);
+					}
+					if ($this->ReadPropertyBoolean("EmailParent")) {
+						$resultemail .= " | Eltern Objekt: ".IPS_GetName(IPS_GetParent($VariableID));
+					}
+					if ($this->ReadPropertyBoolean("EmailID")) {      
+						$resultemail .= " | ID: ".$VariableID;
+					}	
+					if ($this->ReadPropertyBoolean("EmailLocation")) {
+						$resultemail .= " | Ort im Objektbaum: ".IPS_GetLocation($VariableID);
+					}
+					$resultemail .= " \n";
+
+					//$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
 
 					if ($result_json == null) {
@@ -196,15 +226,13 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","No empty batteries have been found.", 0);
 			SetValueBoolean($WarningVariableID, false);
 			$this->SetValue('Devices_With_Empty_Battery', "0");
-			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			//$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</b></th></tr></table>'; 
+			var_dump($HTMLBox);
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
                 $Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
-                SetValueString($Webfront_Message_BoxID, $result);
+				SetValueString($Webfront_Message_BoxID, $HTMLBox);
             }
-
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
-				SetValueString($Webfront_Message_BoxID, $result);
-			}
 
 			if ($this->ReadPropertyBoolean('Variable_Output') == true)	{
 				$this->SetValue('Profile_Monitor_RAW', "[]");
@@ -272,13 +300,13 @@ class ProfileMonitor extends IPSModule {
 
 			if ($NotifyByApp == true) {
 				if ($result == "") {
-					$this->SendDebug("Email","Will try to send email - All OK", 0);
+					$this->SendDebug("App-Message","Will try to send app notification - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKTextApp"));
 					$this->NotifyApp();
 				}
 				elseif ($result != "") {
-					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
+					$this->SendDebug("App-Message","Will try to send app notification - Empty Batterie", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationErrorTextApp"));
 					$this->NotifyApp();
