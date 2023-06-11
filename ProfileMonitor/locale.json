@@ -41,7 +41,7 @@
 			"Value": "Wert",
 			"Table header - Location in Object Tree":"Überschrift Tabelle - Ort im Objektbaum",
 			"Display ID": "Objekt ID Anzeigen",
-			"Display Value": "Wert Anzeigen",
+			"Object Name": "Name des Objekts",
 			"Display Parent": "Objekt darüber anzeigen",
 			"Display Location": "Ort im Objektbaum anzeigen",
 			"Display Last Update": "Zeitpunkt der letzten Aktualisierung anzeigen",
