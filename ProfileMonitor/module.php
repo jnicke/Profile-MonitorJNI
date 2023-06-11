@@ -109,6 +109,7 @@ class ProfileMonitor extends IPSModule {
 
 		$this->SendDebug("","", 0);
 		$this->SendDebug("Profile Monitor","********** Checking **********", 0);
+		//var_dump($Profiles);
 
 		$VariableIDs = IPS_GetVariableList();
 		foreach($VariableIDs as $VariableID) {
@@ -127,7 +128,8 @@ class ProfileMonitor extends IPSModule {
 					{
 						if ($profileName == $pName)	{
 							$checked_variable_json .= $VariableID.',';
-							if (is_bool($pValue)) {
+							//if (is_bool($pValue)) {
+							if (IPS_GetVariable($VariableID)["VariableType"] == "0") {
 								if ($value == $pValue) {
 									if (json_decode($IDs2Ignore,true) != null) {
 										$IgnoreIDArray = [];
@@ -144,30 +146,34 @@ class ProfileMonitor extends IPSModule {
 									}
 									else {
 										//var_dump($VariableID);
+										$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning MATCHING and is not ignored.", 0);
 										$warning = true;
 									}
 								}
 							}
 							else {
-								if ($value <= $pValue) {
-									if (json_decode($IDs2Ignore,true) != null) {
-										$IgnoreIDArray = [];
-										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-											array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
-										} 												
-										if (!in_array($VariableID, $IgnoreIDArray)) { 
+								//if (IPS_GetVariable($VariableID)["VariableType"] == "1" OR IPS_GetVariable($VariableID)["VariableType"] == "2") {
+									if ($value <= $pValue) {
+										if (json_decode($IDs2Ignore,true) != null) {
+											$IgnoreIDArray = [];
+											foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+												array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
+											} 												
+											if (!in_array($VariableID, $IgnoreIDArray)) { 
+												$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is not ignored.", 0);
+												$warning = true;
+											} 
+											elseif (in_array($VariableID, $IgnoreIDArray)) { 
+												$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is IGNORED.", 0);
+											} 
+										}
+										else {
+											//var_dump($VariableID);
 											$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is not ignored.", 0);
 											$warning = true;
-										} 
-										elseif (in_array($VariableID, $IgnoreIDArray)) { 
-											$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is IGNORED.", 0);
-										} 
+										}
 									}
-									else {
-										//var_dump($VariableID);
-										$warning = true;
-									}
-								}
+								//}
 							}
 							break;
 						}
