@@ -46,3 +46,12 @@ The module queries every x days at a defined time all variables where a battery 
 * New - All variables that were checked can be saved to a variable as JSON
 * New - It is possible to save the triggering value in the HTML table
 * Fix - The HTML variable works also with the Light Skin
+
+1.4 - 28-05-2023
+* New - Timestamp when Variable was update last can be displayed
+* New - Padding in HTML can be configured
+
+1.5 - 11-06-2023
+* New - Ability to configure content of the email sent
+* Fix - Selecting more than 1 exclusion did not work
+* Fix - HTML now shows a message when nothing is found

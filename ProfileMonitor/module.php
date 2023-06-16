@@ -31,11 +31,18 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyString("HTMLBoxNothingFound","Keine Komponenten gefunden");
 		$this->RegisterPropertyString("HTMLBoxParentTranslation","Ursprungsobjekt");
 		$this->RegisterPropertyString("HTMLBoxLocationTranslation","Ort im Objektbaum");
+		$this->RegisterPropertyString("HTMLBoxLastUpdateTranslation","Aktualisiert");
 		$this->RegisterPropertyBoolean("HTMLBoxID",true);
 		$this->RegisterPropertyBoolean("HTMLBoxValue",false);
 		$this->RegisterPropertyBoolean("HTMLBoxParent",false);
 		$this->RegisterPropertyBoolean("HTMLBoxLocation",false);
+		$this->RegisterPropertyBoolean("HTMLBoxLastUpdate",false);
+		$this->RegisterPropertyInteger("HTMLBoxCellPadding", "10");
 		$this->RegisterPropertyString("HTMLBoxTextColor","ffffff");
+		$this->RegisterPropertyBoolean("EmailID",true);
+		$this->RegisterPropertyBoolean("EmailValue",false);
+		$this->RegisterPropertyBoolean("EmailParent",false);
+		$this->RegisterPropertyBoolean("EmailLocation",false);
 		$this->RegisterPropertyString("HTMLBoxBackgroundColor","080808");
 		$this->RegisterPropertyString("NotificationOKSubject","Symcon Batterie Monitor"); 
 		$this->RegisterPropertyString("NotificationOKText","Keine leeren Batterien gefunden"); 
@@ -96,8 +103,13 @@ class ProfileMonitor extends IPSModule {
 		$result = "";
 		$result_json = "";
 		$checked_variable_json = "";
+		//$resultemail = '<html><body>';
 		$resultemail = $this->ReadPropertyString("NotificationErrorText")." \n \n";
 		$device_count = 0;
+
+		$this->SendDebug("","", 0);
+		$this->SendDebug("Profile Monitor","********** Checking **********", 0);
+		//var_dump($Profiles);
 
 		$VariableIDs = IPS_GetVariableList();
 		foreach($VariableIDs as $VariableID) {
@@ -116,39 +128,52 @@ class ProfileMonitor extends IPSModule {
 					{
 						if ($profileName == $pName)	{
 							$checked_variable_json .= $VariableID.',';
-							if (is_bool($pValue)) {
+							//if (is_bool($pValue)) {
+							if (IPS_GetVariable($VariableID)["VariableType"] == "0") {
 								if ($value == $pValue) {
-									
 									if (json_decode($IDs2Ignore,true) != null) {
+										$IgnoreIDArray = [];
 										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-											$IgnoreID = $IgnoreID["ID2Ignore"];
-											if ($VariableID != $IgnoreID) { 
-												$warning = true;
-											} 
-										}
+											array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
+										} 												
+										if (!in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning MATCHING and is not ignored.", 0);
+											$warning = true;
+										} 
+										elseif (in_array($VariableID, $IgnoreIDArray)) { 
+											$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning MATCHING and is IGNORED.", 0);
+										} 								
 									}
 									else {
 										//var_dump($VariableID);
+										$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning MATCHING and is not ignored.", 0);
 										$warning = true;
 									}
 								}
 							}
 							else {
-								if ($value <= $pValue) {
-									//foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-									if (json_decode($IDs2Ignore,true) != null) {
-										foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
-											$IgnoreID = $IgnoreID["ID2Ignore"];
-											if ($VariableID != $IgnoreID) { 
+								//if (IPS_GetVariable($VariableID)["VariableType"] == "1" OR IPS_GetVariable($VariableID)["VariableType"] == "2") {
+									if ($value <= $pValue) {
+										if (json_decode($IDs2Ignore,true) != null) {
+											$IgnoreIDArray = [];
+											foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
+												array_push($IgnoreIDArray, $IgnoreID["ID2Ignore"]);
+											} 												
+											if (!in_array($VariableID, $IgnoreIDArray)) { 
+												$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is not ignored.", 0);
 												$warning = true;
 											} 
+											elseif (in_array($VariableID, $IgnoreIDArray)) { 
+												$this->SendDebug("Warning Ignored","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is IGNORED.", 0);
+											} 
+										}
+										else {
+											//var_dump($VariableID);
+											$this->SendDebug("Warning Match","Variable: ".$VariableID." is giving a warning being LESS OR EQUAL and is not ignored.", 0);
+											$warning = true;
 										}
 									}
-									else {
-										//var_dump($VariableID);
-										$warning = true;
-									}
-								}
+								//}
 							}
 							break;
 						}
@@ -161,20 +186,37 @@ class ProfileMonitor extends IPSModule {
 					//$color2 = ' style="background-color:#080808; color:' . $textColor . ';"'; 
 
 					$result .= '<tr><td>'.IPS_GetName($VariableID).'</td>';
-					if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-						$result .= '<td>'.$VariableID.'</td>'; // </br>
+					if ($this->ReadPropertyBoolean("HTMLBoxID")) {      
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.$VariableID.'</td>'; // </br>
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-						$result .= '<td>'.GetValueFormatted($VariableID).'</td>';
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.GetValueFormatted($VariableID).'</td>';
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-						$result .= '<td>'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.IPS_GetName(IPS_GetParent($VariableID)).'</td>'; // </br>
 					}
 					if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-						$result .= '<td>'.IPS_GetLocation($VariableID).'</td>'; // </br>
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.IPS_GetLocation($VariableID).'</td>'; // </br>
+					}
+					if ($this->ReadPropertyBoolean("HTMLBoxLastUpdate")) {
+						$result .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px">'.date("Y-m-d H:i:s", IPS_GetVariable($VariableID)["VariableChanged"]).'</td>'; // </br>
 					}
 
-					$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
+					if ($this->ReadPropertyBoolean("EmailValue")) {
+						$resultemail .= " Name: ".IPS_GetName($VariableID);
+					}
+					if ($this->ReadPropertyBoolean("EmailParent")) {
+						$resultemail .= " | Eltern Objekt: ".IPS_GetName(IPS_GetParent($VariableID));
+					}
+					if ($this->ReadPropertyBoolean("EmailID")) {      
+						$resultemail .= " | ID: ".$VariableID;
+					}	
+					if ($this->ReadPropertyBoolean("EmailLocation")) {
+						$resultemail .= " | Ort im Objektbaum: ".IPS_GetLocation($VariableID);
+					}
+					$resultemail .= " \n";
+
+					//$resultemail .= IPS_GetName($VariableID)." ID: ".$VariableID." \n";
 					$device_count++;
 
 					if ($result_json == null) {
@@ -190,15 +232,13 @@ class ProfileMonitor extends IPSModule {
 			$this->SendDebug("Battery Monitor","No empty batteries have been found.", 0);
 			SetValueBoolean($WarningVariableID, false);
 			$this->SetValue('Devices_With_Empty_Battery', "0");
-			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			//$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></th></tr><tr><td>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</td></tr></table>'; 
+			$HTMLBox      = '<table><tr><th><b>'.$this->ReadPropertyString("HTMLBoxNothingFound").'</b></th></tr></table>'; 
+			//var_dump($HTMLBox);
 			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
                 $Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
-                SetValueString($Webfront_Message_BoxID, $result);
+				SetValueString($Webfront_Message_BoxID, $HTMLBox);
             }
-
-			if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
-				SetValueString($Webfront_Message_BoxID, $result);
-			}
 
 			if ($this->ReadPropertyBoolean('Variable_Output') == true)	{
 				$this->SetValue('Profile_Monitor_RAW', "[]");
@@ -215,18 +255,21 @@ class ProfileMonitor extends IPSModule {
 			
 			$HTMLBox = '<table><tr><td><b>'.$this->ReadPropertyString("HTMLBoxAktorName").'</b></td>';
 			if ($this->ReadPropertyBoolean("HTMLBoxID")) {
-				$HTMLBox .= '<td><b>ID</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>ID</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxValue")) {
-				$HTMLBox .= '<td><b>Value</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>Value</b></td>';
 			}
 
 			if ($this->ReadPropertyBoolean("HTMLBoxParent")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxParentTranslation").'</b></td>';
 			}
 			if ($this->ReadPropertyBoolean("HTMLBoxLocation")) {
-				$HTMLBox .= '<td><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>';
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxLocationTranslation").'</b></td>';
+			}
+			if ($this->ReadPropertyBoolean("HTMLBoxLastUpdate")) {
+				$HTMLBox .= '<td style="padding-left: '.$this->ReadPropertyInteger("HTMLBoxCellPadding").'px"><b>'.$this->ReadPropertyString("HTMLBoxLastUpdateTranslation").'</b></td>';
 			}
 			$HTMLBox .= '</tr>'.$result.'</table>';
 			
@@ -263,13 +306,13 @@ class ProfileMonitor extends IPSModule {
 
 			if ($NotifyByApp == true) {
 				if ($result == "") {
-					$this->SendDebug("Email","Will try to send email - All OK", 0);
+					$this->SendDebug("App-Message","Will try to send app notification - All OK", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationOKSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationOKTextApp"));
 					$this->NotifyApp();
 				}
 				elseif ($result != "") {
-					$this->SendDebug("Email","Will try to send email - Empty Batterie", 0);
+					$this->SendDebug("App-Message","Will try to send app notification - Empty Batterie", 0);
 					$this->SetBuffer("NotifierSubject",$this->ReadPropertyString("NotificationErrorSubject"));
 					$this->SetBuffer("NotifierMessage",$this->ReadPropertyString("NotificationErrorTextApp"));
 					$this->NotifyApp();
