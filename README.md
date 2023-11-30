@@ -55,3 +55,6 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - Es ist nun möglich die Variablen in der Email auszuwählen
 * Fix - Das Verwenden von mehr als einer Ausnahme funktionierte nicht
 * Fix - HTMLbox zeigt nun einen Text an wenn nichts gefunden wurde
+
+1.6 - 30-11-2023
+* Neu - Support für Symcon 7 Visu Notification
