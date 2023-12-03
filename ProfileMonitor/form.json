@@ -191,7 +191,7 @@
 	{
             "type": "SelectLink",
             "name": "NotificationOpen",
-            "caption": "Link to open from notification"
+            "caption": "Object to open when clicking on notification"
         },
         {
             "type": "ExpansionPanel",
