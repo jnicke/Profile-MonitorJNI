@@ -343,13 +343,13 @@ class ProfileMonitor extends IPSModule {
 
 	public function NotifyApp() {
 		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
-		/*
-		if (isset($this->ReadPropertyInteger('NotificationOpen'))) {
+		
+		if ($this->ReadPropertyInteger('NotificationOpen' > 0)) {
 			$NotificationID = $this->ReadPropertyInteger('NotificationOpen');
 		} else {
 			$NotificationID = 0;
 		}
-		*/
+		
 		
 		if ($WebfrontVariable != "") {
 			$NotifierTitle = $this->GetBuffer("NotifierSubject");
@@ -363,7 +363,7 @@ class ProfileMonitor extends IPSModule {
 			}
 			if (IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}') != NULL) {
 				$TileVisu = IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}')[0];
-				VISU_PostNotification($TileVisu, $NotifierTitle, $NotifierMessage , "Info", 0);
+				VISU_PostNotification($TileVisu, $NotifierTitle, $NotifierMessage , "Info", NotificationID);
 			}	
 			$this->SendDebug("Notifier","********** App Notifier **********", 0);
 			$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
