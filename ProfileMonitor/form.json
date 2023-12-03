@@ -188,6 +188,11 @@
             "name": "WebfrontVariable",
             "caption": "Webfront ID Selection"
         },
+	{
+            "type": "SelectInstance",
+            "name": "NotificationOpen",
+            "caption": "Object to open in notification"
+        },
         {
             "type": "ExpansionPanel",
             "caption": "HTML Box Configuration & Translation",
