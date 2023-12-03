@@ -189,7 +189,7 @@
             "caption": "Webfront ID Selection"
         },
 	{
-            "type": "SelectInstance",
+            "type": "SelectLink",
             "name": "NotificationOpen",
             "caption": "Object to open in notification"
         },
