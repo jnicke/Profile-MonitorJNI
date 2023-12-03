@@ -362,7 +362,7 @@ class ProfileMonitor extends IPSModule {
 			}
 			if (IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}') != NULL) {
 				$TileVisu = IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}')[0];
-				VISU_PostNotification($TileVisu, $NotifierTitle, $NotifierMessage , "Info", $Webfront_Message_BoxID);
+				VISU_PostNotification($TileVisu, $NotifierTitle, $NotifierMessage , "Info", $NotificationOpenID);
 			}	
 			$this->SendDebug("Notifier","********** App Notifier **********", 0);
 			$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
