@@ -360,7 +360,7 @@ class ProfileMonitor extends IPSModule {
 			}
 			if (IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}') != NULL) {
 				$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
-				WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", $NotificationID);
+				WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
 			}
 			if (IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}') != NULL) {
 				$TileVisu = IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}')[0];
