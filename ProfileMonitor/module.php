@@ -344,8 +344,8 @@ class ProfileMonitor extends IPSModule {
 	public function NotifyApp() {
 		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
 
-		if (isset($this->ReadPropertyInteger('$this->RegisterPropertyInteger'))) {
-			$NotificationID = $this->ReadPropertyInteger('$this->RegisterPropertyInteger');
+		if (isset($this->ReadPropertyInteger('NotificationOpen'))) {
+			$NotificationID = $this->ReadPropertyInteger('NotificationOpen');
 		} else {
 			$NotificationID = 0;
 		}
