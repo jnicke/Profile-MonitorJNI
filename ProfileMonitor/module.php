@@ -54,6 +54,7 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		$this->RegisterPropertyInteger("EmailVariable", 0);
 		$this->RegisterPropertyInteger("WebfrontVariable", 0);
+		$this->RegisterPropertyInteger("NotificationOpen",0);
 		$this->RegisterPropertyInteger("ExecutionHour","18");
 		$this->RegisterPropertyInteger("ExecutionMinute","00");
 		$this->RegisterPropertyInteger("ExecutionInterval","3");
@@ -343,10 +344,10 @@ class ProfileMonitor extends IPSModule {
 	public function NotifyApp() {
 		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
 
-		if ($this->ReadPropertyBoolean('Webfront_HTML') == true) {
-			$Webfront_Message_BoxID = $this->GetIDForIdent('Webfront_Message_Box');
+		if (isset($this->ReadPropertyInteger('$this->RegisterPropertyInteger'))) {
+			$NotificationID = $this->ReadPropertyInteger('$this->RegisterPropertyInteger');
 		} else {
-			$Webfront_Message_BoxID = 0;
+			$NotificationID = 0;
 		}
 		
 		if ($WebfrontVariable != "") {
