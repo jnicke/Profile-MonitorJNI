@@ -55,3 +55,6 @@ The module queries every x days at a defined time all variables where a battery 
 * New - Ability to configure content of the email sent
 * Fix - Selecting more than 1 exclusion did not work
 * Fix - HTML now shows a message when nothing is found
+
+1.6 - 30-11-2023
+* New - Support for Symcon 7 Visu Notification, incl. the option to open an object when clicking on notification (Link below Webfront)

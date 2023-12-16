@@ -54,6 +54,7 @@ class ProfileMonitor extends IPSModule {
 		$this->RegisterPropertyBoolean("NotifyByApp", 0);
 		$this->RegisterPropertyInteger("EmailVariable", 0);
 		$this->RegisterPropertyInteger("WebfrontVariable", 0);
+		$this->RegisterPropertyInteger("NotificationOpen",0);
 		$this->RegisterPropertyInteger("ExecutionHour","18");
 		$this->RegisterPropertyInteger("ExecutionMinute","00");
 		$this->RegisterPropertyInteger("ExecutionInterval","3");
@@ -343,16 +344,30 @@ class ProfileMonitor extends IPSModule {
 	public function NotifyApp() {
 		$WebfrontVariable = $this->ReadPropertyInteger("WebfrontVariable");
 		
+		//if ($this->ReadPropertyInteger('NotificationOpen' !== 0)) {
+		if (empty($this->ReadPropertyInteger('NotificationOpen'))) {
+			$NotificationID = 0;
+		} else {
+			$NotificationID = $this->ReadPropertyInteger('NotificationOpen');
+		}
+		
+		
 		if ($WebfrontVariable != "") {
 			$NotifierTitle = $this->GetBuffer("NotifierSubject");
 			$NotifierMessage = $this->GetBuffer("NotifierMessage");
 			if ($NotifierMessage == "") {
 				$NotifierMessage = "Test Message";
 			}
-			$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
+			if (IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}') != NULL) {
+				$WebFrontMobile = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}')[0];
+				WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
+			}
+			if (IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}') != NULL) {
+				$TileVisu = IPS_GetInstanceListByModuleID('{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}')[0];
+				VISU_PostNotification($TileVisu, $NotifierTitle, $NotifierMessage , "Info", $NotificationID);
+			}	
 			$this->SendDebug("Notifier","********** App Notifier **********", 0);
 			$this->SendDebug("Notifier","Message: ".$NotifierMessage." was sent", 0);
-			WFC_PushNotification($WebFrontMobile, $NotifierTitle, $NotifierMessage , "", 0);
 		}
 		else {
 			echo $this->Translate('Webfront Instance is not configured');

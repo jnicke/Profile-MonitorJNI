@@ -29,6 +29,7 @@
 			"Profile Monitor all checked variable JSON": "Profil Monitor alle geprüften Variablen",
 			"Notify by Email": "Email Benachrichtigung",
 			"Notify by App": "App Benachrichtigung",
+			"Object to open when clicking on notification": "Objekt öffnen bei Click auf Notification",
 			"Email ID Selection": "ID SMTP-Email Konfiguration",
 			"Webfront ID Selection": "ID Webfront Konfiguration",
 			"Always send message": "Immer benachrichtigen",
