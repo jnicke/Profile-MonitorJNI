@@ -60,4 +60,4 @@ Das Modul fragt alle x Tage um eine definerte Zeit alle Variablen ab bei denen e
 * Neu - Support für Symcon 7 Visu Notification, inkl. der Möglichkeit ein Objekt (Link UNTERHALB von Webfront) bei Click auf Nachricht zu öffnen
 
 1.7 - 04-03-2025
-* Integer werden nicht mehr auf <= geprüft, sondern auf =
+* Integer werden nicht mehr auf <= geprüft, sondern auf >=
