@@ -154,7 +154,7 @@ class ProfileMonitorJNI extends IPSModule {
 							}
 							else {
 								//if (IPS_GetVariable($VariableID)["VariableType"] == "1" OR IPS_GetVariable($VariableID)["VariableType"] == "2") {
-									if ($value == $pValue) {
+									if ($value >= $pValue) {
 										if (json_decode($IDs2Ignore,true) != null) {
 											$IgnoreIDArray = [];
 											foreach (json_decode($IDs2Ignore,true) as $IgnoreID) {
