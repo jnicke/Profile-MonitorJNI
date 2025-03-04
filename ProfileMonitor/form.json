@@ -19,6 +19,10 @@
                 {
                     "type": "Label",
                     "label": "The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them."
+                },
+		                {
+                    "type": "Label",
+                    "label": "The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them."
                 }
             ]
         },
