@@ -22,7 +22,7 @@
                 },
 		                {
                     "type": "Label",
-                    "label": "The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them."
+                    "label": "This beta version checks Boolean Profiles and Integer Profiles for >= Specially adapted for valve status of the actuators"
                 }
             ]
         },
