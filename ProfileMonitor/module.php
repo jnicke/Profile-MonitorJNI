@@ -11,7 +11,7 @@ if (!defined('vtBoolean')) {
     define('vtObject', 9);
 }
 
-class ProfileMonitor extends IPSModule {
+class ProfileMonitorJNI extends IPSModule {
 
 	public function Create() {
 		//Never delete this line!
