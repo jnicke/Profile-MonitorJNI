@@ -6,6 +6,7 @@
 			"To use the module Activate it, set the frequency when profiles should be checked and how you want to get informed about e.g. empty batteries.": "Um das Modul zu verwenden, aktivieren Sie es, stellen Sie die Häufigkeit ein, mit der Profile überprüft werden sollen und wie Sie z.B. über leere Batterien informiert werden möchten.",
 			"To get notified of events it is possible to display a HTML box for the webfront or send out email/app notifications.": "Um die überwachten Profile anzuzeigen ist es möglich eine HTML für das Webfront zu erstellen oder Email/App Nachrichten zu senden.",
 			"The default values check for empty batteries - if you want to check for something else, simply delete the default values and replace them.": "Die Standardwerte prüfen auf leere Batterien - wenn Sie auf etwas anderes prüfen wollen, löschen Sie einfach die Standardwerte und ersetzen Sie sie.",
+			"This beta version checks Boolean Profiles and Integer Profiles for >= Specially adapted for valve status of the actuators": "Diese Beta Version prüft Boolean Profile und Integer Profile auf >= Speziell angepasst für VentilStatus der Stellantriebe",
 			"Profile Monitor - Configuration": "Profil Überwachnung - Konfiguration",			
 			"Active": "Aktiv",
 			"Check Timer Method": "Art des Prüfintervals",
