@@ -1,11 +1,11 @@
 {
-    "id": "{D28C98B1-FB03-3D25-8816-A9E31C39A034}",
-    "name": "ProfileMonitor",
+    "id": "{72B99E92-1E8D-683C-88BA-0440DFC98C34}",
+    "name": "ProfileMonitorJNI",
     "type": 3,
     "vendor": "",
     "aliases": 
     [
-        "Profile Monitor"
+        "Profile Monitor JNI"
     ],
     "parentRequirements": [],
     "childRequirements": [],
