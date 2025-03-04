@@ -68,7 +68,7 @@ class ProfileMonitorJNI extends IPSModule {
 
 		$this->EnableAction("RemoteTrigger");	
 
-		$this->RegisterTimer("Profile Monitor",0,"BW_Check(\$_IPS['TARGET']);");
+		$this->RegisterTimer("Profile Monitor",0,"BWJ_Check(\$_IPS['TARGET']);");
 
 	}
 
