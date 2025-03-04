@@ -1,12 +1,12 @@
 {
-    "id": "{F6666B38-34A7-7220-938C-33B095A4397B}",
-    "name": "ProfileMonitor",
-    "author": "elueckel",
-    "url": "https://github.com/elueckel/profile-monitor",
+    "id": "{317FD866-9A1E-D4CC-DD1C-E6FF2DDE5F35}",
+    "name": "ProfileMonitorJNI",
+    "author": "elueckel-jni",
+    "url": "https://github.com/jnicke/Profile-MonitorJNI",
     "compatibility": {
         "version": "6.0"
     },
-    "version": "1.6",
+    "version": "1.7",
     "build": 0,
     "date": 0
 }
