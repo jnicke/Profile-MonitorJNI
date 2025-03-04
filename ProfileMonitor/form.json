@@ -24,7 +24,7 @@
         },
         {
             "type": "Label",
-            "label": "Profile Monitor - Configuration"
+            "label": "Profile Monitor JNI - Configuration"
         },
         {
             "type": "CheckBox",
@@ -328,7 +328,7 @@
                 {
                     "type": "Button",
                     "label": "Test & Check Profiles",
-                    "onClick": "BW_Check($id);"
+                    "onClick": "BWJ_Check($id);"
                 }
             ]
         }
