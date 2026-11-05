@@ -1,5 +1,5 @@
 # Profile Monitor
-
+forked from elueckel/Profile-Monitor
 Der Profile Monitor ist ein Modul mit dem Variablen und deren Profile überwacht werden können. Ein Beispiel wäre z.B. die Suche nach leeren Batterien welche in einer Variable angezeigt werden. Wenn eine Variable mit einem bestimmten Profilwert gefunden wird, dann kann können diese Variablen z.B. im Webfront angezeigt oder Email/App Notifications gesendet werden.
 
 * Setzen einer Alarmvariable
